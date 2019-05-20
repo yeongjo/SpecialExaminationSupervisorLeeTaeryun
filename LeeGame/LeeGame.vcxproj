@@ -181,6 +181,7 @@
     <ClCompile Include="Guy.cpp" />
     <ClCompile Include="KeyM.cpp" />
     <ClCompile Include="LeeGame.cpp" />
+    <ClCompile Include="MyMain.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>

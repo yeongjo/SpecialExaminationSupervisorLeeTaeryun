@@ -48,3 +48,6 @@ void StudentState::action(Student *stu) {
 	// TODO 원하는 애니메이션으로 바뀌게하기
 	stu->sprite.changeAnim(0);
 }
+
+void SpyStudentState::action(Student *stu) {
+}
