@@ -1,6 +1,8 @@
 ﻿// LeeGame.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
+#define _NO_Warin
+
 #include "framework.h"
 #include "LeeGame.h"
 #include "UI.h"
@@ -112,11 +114,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 bool isGamePlayScene = true;
+constexpr int dbStartPosX = 100;
+constexpr int dbStartPosY = 100;
+Pos<> dbStartPos = Pos<>(dbStartPosX,dbStartPosY);
 
 void init(HWND hWnd) {
+	SceneM::init();
+
 	// TODO layout 학생위치 책상위치, 교실위치 정해야함
 	win.init(hWnd, 500,500);
-	GameInputM::s.init(hWnd);
+	GameInputM::getIns().init(hWnd, &dbStartPos);
 
 	// TODO 게임시작했을때 불리게하기
 	GameM::getIns().init();
@@ -136,6 +143,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 		init(hWnd );
 		SetTimer(hWnd, 0, deltatime, NULL);
+		break;
+	case WM_TIMER:
+		update();
+		win.clearWindow();
 		break;
     case WM_COMMAND:
         {
@@ -168,7 +179,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				;
 
 			// TODO Layout 100, 100 아래부터 렌더
-			win.postrender(100,100);
+			win.postrender(dbStartPosX,dbStartPosY);
             EndPaint(hWnd, &ps);
         }
         break;

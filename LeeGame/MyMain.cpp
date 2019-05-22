@@ -10,7 +10,7 @@ int deltatime = 15;
 
 WindowM win;
 
-vector<SceneM> SceneM::self;
+vector<SceneM> SceneM::self(1);
 
 void getWindowSize(HWND hwnd) {
 	GetClientRect(hwnd, &rectView);

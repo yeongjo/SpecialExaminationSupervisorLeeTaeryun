@@ -22,3 +22,4 @@ public:
 	// 그래야 마우스가 나가도 드래그 되기때문
 	virtual void drag() = 0;
 };
+

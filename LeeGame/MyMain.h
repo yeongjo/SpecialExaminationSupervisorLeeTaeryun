@@ -504,18 +504,6 @@ class SceneM {
 	vector<vector<Manager*>> objs;
 	static vector<SceneM> self;
 
-	SceneM() {
-		/*
-		교실
-		책상, 휴지통, 시계
-		시험지, 
-		사람들
-		*/
-		resizeLayer(4);
-	}
-
-
-
 	/*
 	교실
 	책상, 휴지통, 시계
@@ -528,7 +516,20 @@ class SceneM {
 	}
 	
 public:
-	static SceneM &getIns(size_t i) { 
+	SceneM() {
+		/*
+		교실
+		책상, 휴지통, 시계
+		시험지, 
+		사람들
+		*/
+		resizeLayer(4);
+	}
+	static void init() {
+		self.resize(1);
+	}
+	static SceneM &getIns(size_t i) {
+		if (i == 0 && self.size() == 0) self.resize(1);
 		if (i < 0 || i >= self.size()) assert("SceneM 에 있지도 않은 인덱스를 참조함"==0);
 		return self [i]; 
 	}
@@ -570,7 +571,7 @@ public:
 	// use for camera or shake
 	Pos<float> off;
 
-	Pos<float> size;
+	Pos<float> size = Pos<float>(10,10);
 	COLORREF color = RGB(20, 20, 20);
 
 	bool isAble = true;

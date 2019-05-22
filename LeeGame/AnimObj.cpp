@@ -31,6 +31,7 @@ void AnimSprite::render(HDC h, Pos<float>& p, Pos<float> &size) {
 	// TODO 애니메이션 가로세로 다 나눌건지 명확하게하기
 	int sx = size.x, sy = size.y;
 	int x = p.x, y = p.y;
+	assert(animImgs.size() != 0);
 	auto& tImage = animImgs [spriteGroupIdx];
 	UINT nSpriteWidth = tImage->GetWidth() / splitUV.x;
 	UINT nSpriteHeight = tImage->GetHeight() / splitUV.y;

@@ -40,6 +40,9 @@ void Student::stayDown() {
 }
 
 void Student::render(HDC h) {
+	//TODO 이미지로 바꿔주기
+	Guy::render(h);
+	return;
 	sprite.render(h, p, size);
 }
 
