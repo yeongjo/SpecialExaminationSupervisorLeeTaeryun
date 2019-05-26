@@ -6,7 +6,7 @@
 #include "framework.h"
 #include "LeeGame.h"
 #include "UI.h"
-
+#include "MergeCpp.h"
 
 #define MAX_LOADSTRING 100
 
@@ -119,7 +119,7 @@ constexpr int dbStartPosY = 100;
 Pos<> dbStartPos = Pos<>(dbStartPosX,dbStartPosY);
 
 void init(HWND hWnd) {
-	SceneM::init();
+	//SceneM::init();
 
 	// TODO layout 학생위치 책상위치, 교실위치 정해야함
 	win.init(hWnd, 500,500);

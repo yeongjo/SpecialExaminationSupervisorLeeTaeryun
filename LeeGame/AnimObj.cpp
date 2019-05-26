@@ -1,5 +1,5 @@
 #include "AnimObj.h"
-
+#include "MTimer.h"
 
 
 AnimSprite::AnimSprite() {

@@ -44,7 +44,7 @@ public:
 	// 근처에서 날 화나게 하는 사람이 있으면 수치증가
 	void takeAngryDamage(float amount);
 
-	// 이상징후 초기화
+	// TODO 이상징후 초기화
 	void resetState();
 
 	// 화남수치 오름

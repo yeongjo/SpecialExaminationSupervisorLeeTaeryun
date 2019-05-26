@@ -2,7 +2,6 @@
 
 #include "resource.h"
 
-#include <windowsx.h>
 #include <sstream>
 #include <vector>
 #include <time.h>
@@ -21,7 +20,7 @@ using namespace std;
 #define PI 3.1415926535f
 #define Radian PI/180
 
-RECT rectView;
+extern RECT rectView;
 void getWindowSize(HWND hwnd);
 
 template<typename T>
@@ -228,46 +227,11 @@ Pos<> CollCircleRect(int x, int y, int r, RECT *rt);
 int normalize(int a);
 void setAlign(Pos<> &a, Pos<> &b);
 void initRandom();
-// 0.0 ~ 1.0
-float random();
-// 0.0 ~ a
-float random(float a);
-// a 와 b 사이의 값 줌
-int random(int a, int b);
-int random(int a);
+float random();// 0.0 ~ 1.0
+float random(float a);// 0.0 ~ a
+int random(int a, int b);// a 와 b 사이의 값 줌
+int random(int a);// 0 ~ a
 Pos<float> randomCircle(float size = 1);
-
-
-
-class DelayC {
-	int remainTime;
-	int _remainTime = 0;
-	bool isLoop;
-	bool isBreak = false;
-	
-public:
-	int idx = 0;
-
-	DelayC(int _remain, bool _isLoop, bool beginStart, int id);
-
-	// isLoop가 false면 return isBreak 루프가 끝나면 알아서 사라짐
-	bool tick(int add = 1);
-
-	void setEnd();
-
-	void setRemainTime(int _remain, bool _isLoop);
-
-	void changeRemainTime(int time);
-
-	bool isEnd();
-
-	void debugRemainTime(HDC hdc, int x, int y);
-
-	void reset();
-
-	// 다음에 무조건 끝나는 조건으로 만들어줌
-	void endNext();
-};
 
 
 // 윈도사이즈
@@ -315,34 +279,21 @@ class SceneM {
 	vector<vector<Manager*>> objs;
 	static vector<SceneM> self;
 
-	SceneM() {
-		/*
-		교실
-		책상, 휴지통, 시계
-		시험지, 
-		사람들
-		*/
-		resizeLayer(4);
-	}
+	
 
-
-
+	void addObj(Manager *obj, size_t layer);
+	
+public:
 	/*
 	교실
 	책상, 휴지통, 시계
 	시험지, 
 	사람들
 	*/
-	void addObj (Manager* obj, size_t layer) {
-		assert(objs.size() > layer);
-		objs[layer].push_back (obj);
+	SceneM() {
+		resizeLayer(4);
 	}
-	
-public:
-	static SceneM &getIns(size_t i) { 
-		if (i < 0 || i >= self.size()) assert("SceneM 에 있지도 않은 인덱스를 참조함"==0);
-		return self [i]; 
-	}
+	static SceneM &getIns(size_t i);
 	void tick ();
 	void render(HDC hdc);
 	void destoryObj(Manager *obj);
@@ -350,26 +301,17 @@ public:
 	void reset();
 
 	// TODO 줄일때 기존에것들 안지우고 줄임 나중에 추가하기
-	void resizeLayer(int layerCount) {
-		objs.resize(layerCount);
-	}
+	void resizeLayer(int layerCount);
 };
 
-WindowM win;
+extern WindowM win;
 
 // 씬매니저에서 
-
 class Manager {
 public:
-	Manager(int layer = 0) {
-		addToM(layer);
-	}
-	virtual ~Manager() {
-		SceneM::getIns(0).destoryObj(this);
-	}
-	void addToM(int layer) {
-		SceneM::getIns(0).addObj (this, layer);
-	}
+	Manager(int layer = 0);
+	virtual ~Manager();
+	void addToM(int layer);
 	virtual void tick () {}
 	virtual void render(HDC hdc){}
 };
@@ -392,37 +334,11 @@ public:
 	
 	virtual ~Obj() {}
 	virtual void tick () {}
-	virtual void render(HDC hdc){
-		renderRect(hdc, static_cast<int>(p.x), static_cast<int>(p.y), (int)size.x, (int)size.y, RGB(20, 20, 20));
-	}
-	virtual int collObj(Obj *o) {
-		if (o == nullptr) return 0;
-		// 나갔을경우
-		if ((p.x > o->p.x + o->size.x || p.x + size.x < o->p.x) ||
-			(p.y > o->p.y + o->size.y || p.y + size.y < o->p.y))
-			return 0;
-		return 1;
-	}
+	virtual void render(HDC hdc);
+	virtual int collObj(Obj *o);
 };
 
-void SceneM::reset() {
-		for (size_t i = 0; i < objs.size(); i++) {
-			for (size_t j = 0; j < objs [i].size(); j++) {
-				delete objs [i][j];
-			}
-			objs [i].clear();
-		}
-	}
-
-void SceneM::render(HDC hdc) {
-	size_t s1 = objs.size();
-	for (size_t i = 0; i < s1; i++) {
-		size_t s2 = objs [i].size();
-		for (size_t j = 0; j < s2; j++) {
-			objs[i][j]->render(hdc);
-		}
-	}
-}
+// TODO 줄일때 기존에것들 안지우고 줄임 나중에 추가하기
 
 class MovableObj :public Obj {
 public:
@@ -436,45 +352,6 @@ public:
 	}
 };
 
-void SceneM::tick() {
-	size_t s1 = objs.size();
-	for (size_t i = 0; i < s1; i++) {
-		size_t s2 = objs [i].size();
-		for (size_t j = 0; j < s2; j++) {
-			objs [i][j]->tick();
-		}
-	}
-}
-
-void SceneM::destoryObj(Manager *obj) {
-	Manager *t;
-	size_t s1 = objs.size();
-	for (size_t i = 0; i < s1; i++) {
-		size_t s2 = objs [i].size();
-		for (size_t j = 0; j < s2; j++) {
-			t = objs [i][j];
-			if (t == obj) {
-				// 스스로 delete 됬을때만 이곳으로 오기때문에 delete 안해도됨
-				//delete t;
-				objs[i].erase(objs[i].begin() + j);
-				return;
-			}
-		}
-	}
-}
-
-template<class T>
-vector<T> unDuplicateRandom(int count, T range) {
-	vector<T> t(count * 2);
-	for (size_t i = 0; i < count; ) {
-		t [i] = rand() % range;
-		if (t [i + count] == 0) {
-			t [i + count] = 1;
-			i++;
-		}
-	}
-	t.resize(count);
-	return t;
-}
+vector<int> unDuplicateRandom(size_t count, int range);
 
 #endif

@@ -1,5 +1,10 @@
 #include "MyMain.h"
 
+RECT rectView;
+WindowM win;
+int deltatime = 15;
+vector<SceneM> SceneM::self;
+
 template<>
 Pos<> ads(Pos<>a) {
 	int x = a.x >= 0 ? a.x : -a.x;
@@ -185,61 +190,105 @@ Pos<float> randomCircle(float size) {
 	return Pos<float>(random(size), random(size));
 }
 
-inline DelayC::DelayC(int _remain, bool _isLoop, bool beginStart, int id) {
-	setRemainTime(_remain, _isLoop);
-	idx = id;
-	if (beginStart)
-		_remainTime = remainTime + 1;
-}
-
-// isLoop가 false면 return isBreak 루프가 끝나면 알아서 사라짐
-
-inline bool DelayC::tick(int add) {
-	_remainTime += add;
-	return isBreak;
-}
-
-inline void DelayC::setEnd() {
-	isBreak = true;
-}
-
-inline void DelayC::setRemainTime(int _remain, bool _isLoop) {
-	remainTime = _remain;
-	isLoop = _isLoop;
-}
-
-inline void DelayC::changeRemainTime(int time) {
-	remainTime = time;
-}
-
-inline bool DelayC::isEnd() {
-	if (remainTime < _remainTime) {
-		if (isLoop)
-			_remainTime = 0;
-		else
-			isBreak = true;
-		return true;
+vector<int> unDuplicateRandom(size_t count, int range) {
+	vector<int> t(count * 2);
+	for (size_t i = 0; i < count; ) {
+		t [i] = rand() % range;
+		if (t [i + count] == 0) {
+			t [i + count] = 1;
+			i++;
+		}
 	}
-	return false;
+	t.resize(count);
+	return t;
 }
 
-inline void DelayC::debugRemainTime(HDC hdc, int x, int y) {
-#ifdef _MBCS
-	stringstream ss;
-#endif
-#ifdef _UNICODE
-	wstringstream ss;
-#endif
-	ss << idx << _T(":") << _remainTime << _T("/") << remainTime;
-	TextOut(hdc, x, y, ss.str().c_str(), ss.str().size());
+inline Manager::Manager(int layer) {
+	addToM(layer);
 }
 
-inline void DelayC::reset() {
-	_remainTime = 0;
+inline Manager::~Manager() {
+	SceneM::getIns(0).destoryObj(this);
 }
 
-// 다음에 무조건 끝나는 조건으로 만들어줌
+inline void Manager::addToM(int layer) {
+	SceneM::getIns(0).addObj(this, layer);
+}
 
-inline void DelayC::endNext() {
-	_remainTime = remainTime + 1;
+inline void Obj::render(HDC hdc) {
+	renderRect(hdc, static_cast<int>(p.x), static_cast<int>(p.y), (int)size.x, (int)size.y, RGB(20, 20, 20));
+}
+
+inline int Obj::collObj(Obj *o) {
+	if (o == nullptr) return 0;
+	// 나갔을경우
+	if ((p.x > o->p.x + o->size.x || p.x + size.x < o->p.x) ||
+		(p.y > o->p.y + o->size.y || p.y + size.y < o->p.y))
+		return 0;
+	return 1;
+}
+
+inline void SceneM::addObj(Manager *obj, size_t layer) {
+	assert(objs.size() > layer);
+	objs [layer].push_back(obj);
+}
+
+inline SceneM &SceneM::getIns(size_t i) {
+	if (i == 0) {
+		self.resize(1);
+	}
+	if (i < 0 || i >= self.size()) assert("SceneM 에 있지도 않은 인덱스를 참조함" == 0);
+	return self [i];
+}
+
+void SceneM::tick() {
+	size_t s1 = objs.size();
+	for (size_t i = 0; i < s1; i++) {
+		size_t s2 = objs [i].size();
+		for (size_t j = 0; j < s2; j++) {
+			objs [i][j]->tick();
+		}
+	}
+}
+
+inline void SceneM::render(HDC hdc) {
+	size_t s1 = objs.size();
+	for (size_t i = 0; i < s1; i++) {
+		size_t s2 = objs [i].size();
+		for (size_t j = 0; j < s2; j++) {
+			objs [i][j]->render(hdc);
+		}
+	}
+}
+
+void SceneM::destoryObj(Manager *obj) {
+	Manager *t;
+	size_t s1 = objs.size();
+	for (size_t i = 0; i < s1; i++) {
+		size_t s2 = objs [i].size();
+		for (size_t j = 0; j < s2; j++) {
+			t = objs [i][j];
+			if (t == obj) {
+				// 스스로 delete 됬을때만 이곳으로 오기때문에 delete 안해도됨
+				//delete t;
+				objs[i].erase(objs[i].begin() + j);
+				return;
+			}
+		}
+	}
+}
+
+inline void SceneM::reset() {
+	for (size_t i = 0; i < objs.size(); i++) {
+		for (size_t j = 0; j < objs [i].size(); j++) {
+			delete objs [i][j];
+		}
+		objs [i].clear();
+	}
+}
+
+// TODO 줄일때 기존에것들 안지우고 줄임 나중에 추가하기
+
+inline void SceneM::resizeLayer(int layerCount) {
+	objs.resize(layerCount);
 }

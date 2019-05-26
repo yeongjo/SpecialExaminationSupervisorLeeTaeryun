@@ -1,6 +1,5 @@
 #include "GameM.h"
-
-
+#include "MTimer.h"
 
 GameM::GameM() {
 }
@@ -67,6 +66,7 @@ size_t GameM::getStudentSize() {
 	for (size_t i = 0; i < classrooms.size(); i++) {
 		size += classrooms [i].getStudentSize();
 	}
+	return size;
 }
 
 Student *GameM::getStudent(int idx) {

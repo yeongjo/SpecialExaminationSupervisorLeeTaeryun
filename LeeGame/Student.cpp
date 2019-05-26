@@ -26,6 +26,10 @@ void Student::takeAngryDamage(float amount) {
 	}
 }
 
+void Student::resetState() {
+
+}
+
 void Student::tick() {
 }
 

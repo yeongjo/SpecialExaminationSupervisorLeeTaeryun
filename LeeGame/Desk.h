@@ -22,6 +22,8 @@ public:
 	// 위치 지정도 해야할듯
 	void init(Student *stu, int x, int y);
 
+	void flip();
+
 	Student *getStudent() { return sitStudent; }
 };
 

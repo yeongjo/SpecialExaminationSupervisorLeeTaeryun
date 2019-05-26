@@ -69,11 +69,11 @@
     <ClInclude Include="MTimer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MergeCpp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LeeGame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="KeyM.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -111,6 +111,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MTimer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MergeCpp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LeeGame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
