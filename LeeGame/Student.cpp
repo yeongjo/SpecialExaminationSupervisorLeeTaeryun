@@ -41,6 +41,9 @@ void Student::stayDown() {
 }
 
 void Student::render(HDC h) {
+	//TODO 이미지로 바꿔주기
+	Guy::render(h);
+	return;
 	sprite.render(h, p, size);
 }
 
@@ -48,4 +51,7 @@ void StudentState::action(Student *stu) {
 	stu->getClassroom()->makeAngryStudentInClass(stu, amount, range);
 	// TODO 원하는 애니메이션으로 바뀌게하기
 	stu->sprite.changeAnim(0);
+}
+
+void SpyStudentState::action(Student *stu) {
 }

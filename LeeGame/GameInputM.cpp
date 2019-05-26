@@ -10,8 +10,9 @@ GameInputM::GameInputM() {
 GameInputM::~GameInputM() {
 }
 
-void GameInputM::init(HWND hWnd) {
+void GameInputM::init(HWND hWnd,Pos<> *dbStartPos) {
 	this->hWnd = hWnd;
+	this->dbStartPos = dbStartPos;
 }
 
 void GameInputM::removeClickObj(ClickObj *obj) {
@@ -32,6 +33,9 @@ void GameInputM::setMousePos() {
 void GameInputM::tick() {
 	setMousePos();
 	int x = mousePos.x, y = mousePos.y;
+	if (!dbStartPos) return;
+	x -= dbStartPos->x;
+	y -= dbStartPos->y;
 	auto keyInst = KeyM::GetInst();
 	bool bOnceDown = keyInst->OnceKeyDown(VK_LBUTTON);
 	bool bStayDown = keyInst->StayKeyDown(VK_LBUTTON);
@@ -50,4 +54,4 @@ void GameInputM::tick() {
 	
 }
 
-GameInputM GameInputM::s;
+GameInputM *GameInputM::s = nullptr;

@@ -26,6 +26,6 @@ void Guy::onceUp() {
 
 void Guy::drag() {
 	if (!isDraging)return;
-	auto t = GameInputM::s.getMousePos();
+	auto t = GameInputM::getIns().getMousePos();
 	p.set(t.x - size.x/2, t.y - size.y/2);
 }

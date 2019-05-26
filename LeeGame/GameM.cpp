@@ -3,7 +3,6 @@
 
 
 GameM::GameM() {
-	init();
 }
 
 
@@ -36,6 +35,8 @@ void GameM::update() {
 	// 1sec : passClock * 0.001f
 	// 60sec : 1sec / 60
 	time = 1 + passClock * 0.001f / 60.f;
+
+	SceneM::getIns(0).tick();
 
 	// 다음교시로 넘어감
 	if (period + 1 <= (int)time) {

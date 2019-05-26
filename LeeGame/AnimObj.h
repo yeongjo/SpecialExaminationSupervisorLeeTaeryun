@@ -23,4 +23,3 @@ public:
 	virtual void render(HDC h, Pos<float>& p, Pos<float> &size);
 };
 
- 
