@@ -1,6 +1,6 @@
 #include "Student.h"
 #include "Classroom.h"
-
+#include "GameM.h"
 
 Student::Student() : Guy() {
 }
@@ -30,10 +30,11 @@ void Student::tick() {
 }
 
 void Student::angryFlipDesk() {
+	sitDesk->flip();
 }
 
 void Student::onceDown() {
-	int i = 0; // TODO Å×½ºÆ®
+	int i = 0;
 }
 
 void Student::stayDown() {

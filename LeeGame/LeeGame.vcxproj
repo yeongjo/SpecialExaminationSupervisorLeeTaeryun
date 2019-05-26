@@ -163,6 +163,7 @@
     <ClInclude Include="Guy.h" />
     <ClInclude Include="KeyM.h" />
     <ClInclude Include="LeeGame.h" />
+    <ClInclude Include="MTimer.h" />
     <ClInclude Include="MyMain.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Singleton.h" />
@@ -181,6 +182,8 @@
     <ClCompile Include="Guy.cpp" />
     <ClCompile Include="KeyM.cpp" />
     <ClCompile Include="LeeGame.cpp" />
+    <ClCompile Include="MTimer.cpp" />
+    <ClCompile Include="MyMain.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>

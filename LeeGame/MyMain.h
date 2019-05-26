@@ -436,103 +436,6 @@ public:
 	}
 };
 
-// 타이머 사용시에는 마지막에 Timer라 해주기
-class MTimer {
-	static vector<DelayC> managingObjs;
-	static vector<DelayC>::iterator iter;
-	static int id;
-public:
-	// Use this (return timer ID)
-	// 타이머 사용시에는 마지막에 Timer라 해주기
-	static int create(int _remainTime, bool _isLoop = false, bool beginStart = true) {
-		managingObjs.push_back(DelayC(_remainTime, _isLoop, beginStart, id));
-		return id++;
-	}
-
-	// input ID and use
-	static int create(int _remainTime, int _id, bool _isLoop = false, bool beginStart = true) {
-		if (id < _id) return 0;
-		managingObjs.push_back(DelayC(_remainTime, _isLoop, beginStart, _id));
-		id = _id + 1;
-		return 1;
-	}
-
-	// must call this on other tick
-	static void tick(int add = 1) {
-		int t = 0;
-		for (iter = managingObjs.begin(); iter != managingObjs.end(); ++t)
-		{
-			if (iter->tick(add)) {
-				iter = managingObjs.erase(iter);
-			} else
-				++iter;
-		}
-	}
-
-	static bool isEnd(int idx) {
-		for (size_t i = 0; i < managingObjs.size(); i++) {
-			if (managingObjs[i].idx == idx) {
-				return managingObjs[i].isEnd();
-			}
-		}
-		return false;
-	}
-
-	static void setEnd(int idx) {
-		for (size_t i = 0; i < managingObjs.size(); i++) {
-			if (managingObjs[i].idx == idx) {
-				return managingObjs[i].setEnd();
-			}
-		}
-	}
-
-	static void changeEndTime(int idx, int time) {
-		for (size_t i = 0; i < managingObjs.size(); i++) {
-			if (managingObjs[i].idx == idx) {
-				return managingObjs[i].changeRemainTime(time);
-			}
-		}
-	}
-
-	static void reset(int idx) {
-		for (size_t i = 0; i < managingObjs.size(); i++) {
-			if (managingObjs[i].idx == idx) {
-				return managingObjs[i].reset();
-			}
-		}
-	}
-
-	// 다음에 무조건 끝나는 조건으로 만들어줌
-	static void endNext(int idx) {
-		for (size_t i = 0; i < managingObjs.size(); i++) {
-			if (managingObjs[i].idx == idx) {
-				return managingObjs[i].endNext();
-			}
-		}
-	}
-
-	static bool isHere(int idx) {
-		for (size_t i = 0; i < managingObjs.size(); i++) {
-			if (managingObjs[i].idx == idx) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	static void debug(HDC hdc, int x, int y) {
-		int textY = 0;
-		for (size_t i = 0; i < managingObjs.size(); i++)
-		{
-			managingObjs[i].debugRemainTime(hdc, x, y + textY);
-			textY += 15;
-		}
-	}
-};
-
-vector<DelayC> MTimer::managingObjs;
-vector<DelayC>::iterator MTimer::iter;
-int MTimer::id;
 
 // 윈도사이즈
 // 더블버퍼링
@@ -549,56 +452,26 @@ class WindowM {
 	COLORREF bkColor = RGB(255,255,255);
 public:
 	// call when window size change
-	void init(HWND hwnd) {
-		RECT rt;
-		GetClientRect(hwnd, &rt);
-		init(hwnd, rt.right, rt.bottom);
-	}
+	void init(HWND hwnd);
 
-	void init(HWND hwnd, int _x, int _y) {
-		size.set(_x, _y);
-		initRandom(); // 꼽사리
-		this->hwnd = hwnd;
-	}
+	void init(HWND hwnd, int _x, int _y);
 
-	HDC prerender(HDC hdc) {
-		if(!hbit)
-			hbit = CreateCompatibleBitmap(hdc, size.x, size.y);
-		mainDc = hdc;
-		if(!dc)
-			dc = CreateCompatibleDC(hdc);
-		oldBit = (HBITMAP)SelectObject(dc, hbit);
+	HDC prerender(HDC hdc);
 
-		renderRect(dc, 0, 0, size.x, size.y, bkColor);
-		return dc;
-	}
+	void postrender();
 
-	void postrender() {
-		BitBlt(mainDc, 0, 0, size.x, size.y, dc, 0, 0, SRCCOPY);
-		SelectObject(dc, oldBit);
-		//ReleaseDC(hwnd, dc);
-	}
-
-	void postrender(int x, int y) {
-		BitBlt(mainDc, x, y, size.x, size.y, dc, 0, 0, SRCCOPY);
-		SelectObject(dc, oldBit);
-		//ReleaseDC(hwnd, dc);
-	}
+	void postrender(int x, int y);
 
 	// call in tick() plz;
-	void clearWindow() {
-		InvalidateRect(hwnd, NULL, false);
-	}
+	void clearWindow();
 
-	const Pos<>& getSize() const {
-		return size;
-	}
+	const Pos<> &getSize() const;
 };
 
 #define BYE
 #ifdef BYE
 
-int deltatime = 15;
+extern int deltatime = 15;
 
 class Manager;
 

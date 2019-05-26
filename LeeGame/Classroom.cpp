@@ -1,7 +1,6 @@
 #include "Classroom.h"
 
 
-
 Classroom::Classroom() {
 }
 
@@ -55,9 +54,14 @@ void Classroom::makeAngryStudentInClass(Student *stu, float amount, float range)
 }
 
 void Classroom::removeStudent(int i) {
+	delete students [i];
 	students.erase(students.begin() + i);
 }
 
 void Classroom::render(HDC h) {
 
+}
+
+size_t Classroom::getStudentSize() {
+	return students.size();
 }

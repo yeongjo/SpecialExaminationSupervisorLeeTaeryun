@@ -42,6 +42,7 @@ public:
 	// TODO 이미지 그리기
 	virtual void render(HDC h);
 
+	size_t getStudentSize();
 	//자동으로 assert 되니까 안함
 	Student *getStudent(int i) { return students [i]; }
 };

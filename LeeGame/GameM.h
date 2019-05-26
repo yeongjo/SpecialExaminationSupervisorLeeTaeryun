@@ -10,14 +10,14 @@ class GameM : public Singleton<GameM>{
 	int period;// 교시 [ 1부터 시작 ]
 	float time; // 지난 시간 [ 1 -> 2 ] 사이면 1교시이고 2교시로 가는중임
 
-	// 여기서는 포인터로 참조만 하고 교실에서 실제로 들고있음
-	vector<Student*> students; // 교실안에 있는 모든 학생들
 	// 학생들은 교실별로 따로 교실이 가지고있어야할까
 	// 그래야 교실에서 나가는거 만들때 수월할듯
 
 	vector<Classroom> classrooms;
 
 	clock_t begin, passClock;
+
+	int giveAngryTimer;
 public:
 	GameM();
 	~GameM();
@@ -26,13 +26,19 @@ public:
 	void init();
 
 	// 시간흐르게하고 교시가 지나면 학생들 분노수치 완화함
+	// 단계별로 몇초에 한번씩 이상징후 발생하는지
 	void update();
 
+	// 분노수치 초기화 및 얘들 이상상태에서 돌아오게
 	void nextPeriodEffect();
 
+	// 일정 시간이 지나면 학생들중에 한명이 이상징후가짐
+	void giveWithDelayAngry();
+	
 	float getTime() { return time; }
 	int getPeriod() { return period; }
-	Student *getStudent(int idx) { return students [idx]; }
+	size_t getStudentSize();
+	Student *getStudent(int idx);
 	Classroom *getClassroom(int i) { return &classrooms [i]; }
 };
 
