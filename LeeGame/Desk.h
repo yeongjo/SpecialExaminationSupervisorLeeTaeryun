@@ -1,16 +1,18 @@
 #pragma once
 #include "Guy.h"
-class Student;
+class Student; class AnimSprite;
 class Desk : public Obj{
 
 	// TODO 책상엔 시험지가 있고 떨어지면 줍거나 교체할수있음
 	class TestPaper {
 	public:
-		bool isDrop; // 떨어트림
-		bool isMess; // 잘못적어서 교체해달라할거임
+		// 0: 노멀
+		// 1: 떨어트림
+		// 2: 잘못적어서 교체해달라할거임
+		int state = 0;
 	};
 	TestPaper testPaper;
-
+	AnimSprite* anim;
 	Student *sitStudent; // 앉아있는 학생 일어날수도 있음
 	// 학생도 Desk 참조해서 엎기
 public:

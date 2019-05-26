@@ -35,7 +35,9 @@ public:
 	void init(int i);
 
 	// 다른사람들을 화나게하고싶을때 호출
+	// stu에는 이 사람을 제외한 사람이 화나게 한다. 보통은 본인으로
 	void makeAngryStudentInClass(Student *stu, float amount, float range);
+	void makeAngryThisStuent(Student *stu, float amount);
 
 	void removeStudent(int i);
 

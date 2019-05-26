@@ -18,13 +18,19 @@ void AnimSprite::changeAnim(UINT i) {
 	if (i == spriteGroupIdx) return;
 	spriteGroupIdx = i % animIdxGroup.size();
 	spriteSecondIdx = 0;
+	isAnimEnd = false;
 }
 
 void AnimSprite::goNextSpriteIdx() {
-	if (MTimer::isEnd(animDelayTimer) || animIdxGroup.size() == 0) return;
+	if (MTimer::isEnd(animDelayTimer) || animIdxGroup.size() == 0 || isAnimEnd) return;
 	// 다음애니메이션으로 전환
+	int prevSpriteIdx = spriteIdx;
 	spriteSecondIdx = (spriteSecondIdx + 1) % animIdxGroup[spriteGroupIdx].size();
 	spriteIdx = animIdxGroup[spriteGroupIdx][spriteSecondIdx];
+	if (spriteIdx == -1) {
+		spriteIdx = prevSpriteIdx;
+		isAnimEnd = true;
+	}
 }
 
 void AnimSprite::render(HDC h, Pos<float>& p, Pos<float> &size) {

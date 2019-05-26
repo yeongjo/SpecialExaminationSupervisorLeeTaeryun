@@ -19,3 +19,16 @@ bool ClickObj::isMouseOver(int x, int y) {
 	}
 	return false;
 }
+
+void ClickObj::onceDown() {
+	isMouseDown = true;
+}
+
+void ClickObj::stayDown() {
+	isMouseStay = true;
+}
+
+void ClickObj::onceUp() {
+	isMouseDown = false;
+	isMouseStay = false;
+}

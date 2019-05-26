@@ -14,7 +14,9 @@ void Classroom::init(int idx) {
 	p.set((idx-1) * size.x, 100);
 
 	constexpr int studentCount = 9;
+	desks.clear();
 	desks.resize(studentCount);
+	students.clear();
 	students.resize(studentCount);
 
 	vector<int> ran = unDuplicateRandom(studentCount, studentCount);
@@ -51,6 +53,10 @@ void Classroom::makeAngryStudentInClass(Student *stu, float amount, float range)
 		if(students [i] != stu && (students[i]->p-stu->p).squareLength() < range*range)
 			students [i]->takeAngryDamage(amount);
 	}
+}
+
+void Classroom::makeAngryThisStuent(Student *stu, float amount) {
+	stu->takeAngryDamage(amount);
 }
 
 void Classroom::removeStudent(int i) {

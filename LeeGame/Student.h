@@ -19,11 +19,15 @@ private:
 
 	Classroom *myClass; // 교실에 피해끼칠때필요
 
+	// 0 : 평범 문제푸는거 손까닥까닥, 가만히 있는거 추가할지 고민
+	// 1 : 가만히 있는거
+	// 2 : 머리흔드는거
+
 	AnimSprite sprite; // TODO 초기화해야함 사진 불러오고 set UV
 
 	Type type; // GameM가 init 함수를 통해 설정해줌
 
-	StudentState *state;
+	StudentState *state = nullptr;
 
 	//	[송영조] [18:11] int로 1부터 100까지 범위하면
 	//	[송영조] [18:11] 제일 작은게 1로 증가시키는거라 애매하니까
@@ -31,6 +35,8 @@ private:
 
 	// [0 ~ 1] 가짐
 	float angryAmount;
+
+
 public:
 	Student();
 	~Student();
@@ -52,16 +58,18 @@ public:
 
 	void angryFlipDesk();
 
-	// 고민하는 소리
+	// 고민하는 소리, 말풍선
 	void annoySound();
 
 	virtual void onceDown();
 	virtual void stayDown();
+	virtual void onceUp();
 
 	virtual void render(HDC h);
 
-
+	
 	Classroom *getClassroom() { return myClass; }
+	AnimSprite *getSprite() { return &sprite; }
 
 	enum class Type {
 		normal, //  ㅄ
@@ -80,13 +88,47 @@ public:
 // 남들에게 피해주는 행동
 //	머리흔들기, 코골이, 옆사람꺼 컨닝하기
 //	컨닝하기는 *Student 받아와서 확장하기
+
+/* 매번 교체하고 실행하는식으로 할까
+그러면 착한친구가 덮어씌워질수도 있음 */
 class StudentState {
+protected:
+	// 현재상태
+	//StudentStateMaker 로 GameM에서 상태만들어줌
+	StudentState *myState;
 	// 영향끼칠 범위랑 양
 	float range, amount;
+	bool isAble = true;
 public:
 	// 다른사람 혹은 나에게 무슨 영향을 주는지
 	// 나의 애니메이션이 어떤거로 바뀌는지 여기서 결정
+	// 이 안에서 랜덤으로 이 중 하나가 나오게 한다.
+	// stu는 이 함수를 실행한 친구를 줌
 	virtual void action(Student *stu);
+
+	// 상태해결조건이 맞으면 상태해결
+	// 학생에서 클릭인지 드래그중인지 상태를 가져온다.
+	void fixState(Student *stu);
+};
+
+// 시험지 교체해달라하는 상태
+// 시험지 떨구는 상태
+// 코고는 상태
+// 머리흔들기
+// 코골이
+
+class DropPaperStudentState : public StudentState {
+public:
+	DropPaperStudentState() { range = 0; amount = 0.01f; }
+	virtual void action(Student *stu);
+	void fixState(Student *stu);
+};
+
+class WantChangePaperStudentState : public DropPaperStudentState {
+public:
+	WantChangePaperStudentState() { range = 0; amount = 0.01f; }
+	virtual void action(Student *stu);
+	void fixState(Student *stu);
 };
 
 // 특수 상태
@@ -94,17 +136,36 @@ class KindStudentState :public StudentState{
 	virtual void action(Student *stu) {}
 };
 
+// 컨닝하기
 class SpyStudentState : public StudentState {
+	Student *targetStu;
+public:
 	virtual void action(Student *stu); // TODO 애니메이션 인덱스를 몰라서 추가못함
 };
 
 class StudentStateMaker {
 public:
-	static StudentState *makeNewState(int i) {
-		switch (i) {
-		case 0:
-
+	// 랜덤으로 각 교시에 맞는 상태 넘김
+	static StudentState *makeNewState(int period) {
+		float ran = random();
+		int period = GameM::getIns().getPeriod();
+		switch (period) {
+		case 1:
+			return new DropPaperStudentState();
+			break;
+		case 2:
+			if (ran < .3f) {
+				return new DropPaperStudentState();
+			} else if (ran < .6f) {
+				return new DropPaperStudentState();
+			}
+			break;
+		case 3:
+			break;
+		case 4:
 			break;
 		}
+		
+		
 	}
 };

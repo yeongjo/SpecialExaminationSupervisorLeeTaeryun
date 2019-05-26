@@ -22,6 +22,7 @@ void Guy::stayDown() {
 
 void Guy::onceUp() {
 	isDraging = false;
+	remainDragStayTime = 0;
 }
 
 void Guy::drag() {
