@@ -22,79 +22,21 @@ using namespace std;
 #define Radian PI/180
 
 RECT rectView;
-
-void getWindowSize(HWND hwnd) {
-	GetClientRect(hwnd, &rectView);
-}
+void getWindowSize(HWND hwnd);
 
 template<typename T>
 T ads(T a) {
 	return a >= 0 ? a : -a;
 }
 
+void renderEllipse(HDC hdc, int _x, int _y, int _sizeX, int _sizeY, COLORREF color = RGB(255, 255, 0));
+void renderCircle(HDC hdc, int _x, int _y, int _size = 10, COLORREF color = RGB(255, 255, 0));
+void renderRoundRect(HDC hdc, int x, int y, int sizeX, int sizeY, int w, int h, COLORREF color);
+void renderRect(HDC hdc, int _x, int _y, int _sizeX = 10, int _sizeY = 10, COLORREF color = RGB(255, 255, 0));
+void renderTriangle(HDC hdc, int x, int y, int size, COLORREF color = RGB(255, 255, 0));
 
-
-
-void renderEllipse(HDC hdc, int _x, int _y, int _sizeX, int _sizeY, COLORREF color = RGB(255, 255, 0)) {
-	// 블럭사이즈대로 적용하기
-	int x = _x;
-	int y = _y;
-	//int width = _width*.5f;
-
-	HBRUSH hBrush = (HBRUSH)CreateSolidBrush(color);
-	HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-	Ellipse(hdc, x, y, x + _sizeX, y + _sizeY);
-	SelectObject(hdc, oldBrush);
-	DeleteObject(hBrush);
-}
-
-void renderCircle(HDC hdc, int _x, int _y, int _size = 10, COLORREF color = RGB(255, 255, 0)) {
-	renderEllipse(hdc, _x, _y, _size, _size, color);
-}
-
-void renderRoundRect(HDC hdc, int x, int y, int sizeX, int sizeY, int w, int h, COLORREF color) {
-	HBRUSH hBrush = (HBRUSH)CreateSolidBrush(color);
-	HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-	RoundRect(hdc, x, y, x + sizeX, y + sizeY, w, h);
-	SelectObject(hdc, oldBrush);
-	DeleteObject(hBrush);
-}
-
-void renderRect(HDC hdc, int _x, int _y, int _sizeX = 10, int _sizeY = 10, COLORREF color = RGB(255, 255, 0)) {
-	int x = _x, y = _y;
-	HBRUSH hBrush = (HBRUSH)CreateSolidBrush(color);
-	HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-	Rectangle(hdc, x, y, x + _sizeX, y + _sizeY);
-	SelectObject(hdc, oldBrush);
-	DeleteObject(hBrush);
-}
-
-void renderTriangle(HDC hdc, int x, int y, int size, COLORREF color = RGB(255, 255, 0)) {
-	HBRUSH hBrush = (HBRUSH)CreateSolidBrush(color);
-	HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-	MoveToEx(hdc, x, y, NULL);
-	LineTo(hdc, x, y + size);
-	LineTo(hdc, x + size / 2, y + size / 2);
-	LineTo(hdc, x, y);
-	SelectObject(hdc, oldBrush);
-	DeleteObject(hBrush);
-}
-
-bool IsPointInCircle(int x, int y, int r, int px, int py) {
-	int dx = x - px;
-	int dy = y - py;
-	int l = dx * dx + dy * dy;
-	if (l > r*r)
-		return false;
-	return true;
-}
-
-bool collPointRect(int x, int y, RECT* rt) {
-	if ((rt->left <= x && x <= rt->right) &&
-		(rt->top <= y && y <= rt->bottom))
-		return true;
-	return false;
-}
+bool IsPointInCircle(int x, int y, int r, int px, int py);
+bool collPointRect(int x, int y, RECT *rt);
 
 template<typename TT=int>
 struct Pos{
@@ -280,94 +222,22 @@ public:
 	void setZero() { set(0, 0); }
 };
 
-//template<class T>
-//float squareLength(Pos<T> a, Pos<T> b) {
-//	auto 
-//	return x *x + y * y;
-//}
-//
-//float length() {
-//	return sqrtf(squareLength());
-//}
-
-struct Rect {
-	Pos<> a, b;
-};
-
-
 // 원기준으로 사각형방향 반환
-Pos<> CollCircleRect(int x, int y, int r, RECT* rt) {
-	if ((rt->left <= x && x <= rt->right) ||
-		(rt->top <= y && y <= rt->bottom)) {
-		RECT rcEx = {
-			rt->left - r,
-			rt->top - r,
-			rt->right + r,
-			rt->bottom + r
-		};
+Pos<> CollCircleRect(int x, int y, int r, RECT *rt);
 
-		if (rcEx.left < x && x < rcEx.right && rcEx.top < y && y < rcEx.bottom) {
-			if (rt->left > x) return Pos<>(1, 0);
-			if (x > rt->right) return Pos<> (-1, 0);
-			if (rt->top > y) return Pos<> (0, 1);
-			if (y > rt->bottom) return Pos<> (0, -1);
-		}
-	}
-	else {
-		if (IsPointInCircle(x, y, r, rt->left, rt->top))return Pos<> (1, 1);
-		if (IsPointInCircle(x, y, r, rt->left, rt->bottom))return Pos<> (1, -1);
-		if (IsPointInCircle(x, y, r, rt->right, rt->top))return Pos<> (-1, 1);
-		if (IsPointInCircle(x, y, r, rt->right, rt->bottom))return Pos<> (-1, -1);
-	}
-	return Pos<>(0, 0);
-}
-
-//template<typename T>
-int normalize(int a) {
-	return a / ads<int>(a);
-}
-
-void setAlign(Pos<>& a, Pos<>& b) {
-	int x = a.x, y = a.y;
-	int x2 = b.x, y2 = b.y;
-	b.x = max(x, x2);
-	a.x = min(x, x2);
-	b.y = max(y, y2);
-	a.y = min(y, y2);
-}
-
-void initRandom() {
-	srand(time(NULL));
-}
-
+int normalize(int a);
+void setAlign(Pos<> &a, Pos<> &b);
+void initRandom();
 // 0.0 ~ 1.0
-float random() {
-	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-}
-
+float random();
 // 0.0 ~ a
-float random(float a) {
-	return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/a));
-}
+float random(float a);
 // a 와 b 사이의 값 줌
-int random(int a, int b) {
-	return rand() % (b - a) + a;
-}
+int random(int a, int b);
+int random(int a);
+Pos<float> randomCircle(float size = 1);
 
-int random(int a) {
-	return rand() % a;
-}
 
-Pos<float> randomCircle(float size = 1) {
-	return Pos<float>(random(size),random(size));
-}
-
-template<>
-Pos<>ads(Pos<>a) {
-	int x = a.x >= 0 ? a.x : -a.x;
-	int y = a.y >= 0 ? a.y : -a.y;
-	return Pos<>(x, y);
-}
 
 class DelayC {
 	int remainTime;
@@ -378,62 +248,25 @@ class DelayC {
 public:
 	int idx = 0;
 
-	DelayC(int _remain, bool _isLoop, bool beginStart, int id) {
-		setRemainTime(_remain, _isLoop);
-		idx = id;
-		if (beginStart)
-			_remainTime = remainTime + 1;
-	}
+	DelayC(int _remain, bool _isLoop, bool beginStart, int id);
 
 	// isLoop가 false면 return isBreak 루프가 끝나면 알아서 사라짐
-	bool tick(int add = 1) {
-		_remainTime += add;
-		return isBreak;
-	}
+	bool tick(int add = 1);
 
-	void setEnd() {
-		isBreak = true;
-	}
+	void setEnd();
 
-	void setRemainTime(int _remain, bool _isLoop) {
-		remainTime = _remain;
-		isLoop = _isLoop;
-	}
+	void setRemainTime(int _remain, bool _isLoop);
 
-	void changeRemainTime(int time) {
-		remainTime = time;
-	}
+	void changeRemainTime(int time);
 
-	bool isEnd() {
-		if (remainTime < _remainTime) {
-			if (isLoop)
-				_remainTime = 0;
-			else
-				isBreak = true;
-			return true;
-		}
-		return false;
-	}
+	bool isEnd();
 
-	void debugRemainTime(HDC hdc, int x, int y) {
-#ifdef _MBCS
-		stringstream ss;
-#endif
-#ifdef _UNICODE
-		wstringstream ss;
-#endif
-		ss << idx << _T(":")<< _remainTime << _T("/") << remainTime;
-		TextOut(hdc, x, y, ss.str().c_str(), ss.str().size());
-	}
+	void debugRemainTime(HDC hdc, int x, int y);
 
-	void reset() {
-		_remainTime = 0;
-	}
+	void reset();
 
 	// 다음에 무조건 끝나는 조건으로 만들어줌
-	void endNext() {
-		_remainTime = remainTime + 1;
-	}
+	void endNext();
 };
 
 
@@ -471,7 +304,7 @@ public:
 #define BYE
 #ifdef BYE
 
-extern int deltatime = 15;
+extern int deltatime;
 
 class Manager;
 
