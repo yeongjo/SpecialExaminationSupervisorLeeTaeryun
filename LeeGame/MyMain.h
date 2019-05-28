@@ -13,7 +13,12 @@
 #include <cassert>
 #include <Commdlg.h>
 
-#include "KeyM.h"
+#define DBOUT( s )            \
+{                             \
+   std::wstringstream os_;    \
+   os_ << s;                   \
+   OutputDebugString( os_.str().c_str() );  \
+}
 
 using namespace std;
 
