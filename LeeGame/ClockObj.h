@@ -9,13 +9,17 @@ public:
 	~ClockObj();
 
 	virtual void update() {
-		time+=0.1f;
+		time+=1.f;
 	}
 
 	virtual void render(HDC _h) {
 		int x = (int)p.x, y = (int)p.y;
 		int w = (int)size.x, h = (int)size.y;
-		Pie(_h, x, y, w, h, 0,0,(int)time,(int)time);
+		int hSize = w >> 2;
+		float _cos = cos(time * PI / 180)*hSize;
+		float _sin = sin(time * PI / 180)*hSize;
+		Pos<float> center(x + (w >> 2), y + (h >> 2));
+		Pie(_h, x, y, x+w, y+h, center.x, center.y, (int)_cos,(int)_sin);
 	}
 };
 

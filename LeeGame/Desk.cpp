@@ -7,9 +7,7 @@ Desk::Desk() {
 	// TODO 책상 애니메이션 시트 들어오면 수정하기
 	anim->init(Pos<>(1,1));
 
-	for (size_t i = 0; i < length; i++) {
 
-	}
 }
 
 
