@@ -28,8 +28,6 @@ public:
 	Classroom();
 	~Classroom();
 
-	// TODO 교실의 좌표랑 책상들 배치를 어떻게 하지
-
 	/* TODO 이미지 불러오기
 	 학생 수 9명으로 초기화
 	 교실의 사이즈 설정

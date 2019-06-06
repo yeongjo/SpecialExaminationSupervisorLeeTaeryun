@@ -7,6 +7,7 @@
 #include "LeeGame.h"
 #include "UI.h"
 #include "MergeCpp.h"
+#include "MergeCpp.cpp"
 
 #define MAX_LOADSTRING 100
 

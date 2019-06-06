@@ -95,4 +95,25 @@ void DropPaperStudentState::fixState(Student *stu) {
 	}
 }
 
-AnimSpriteByImages *Student::preloadSprite [4] = {0,};
+// 랜덤으로 각 교시에 맞는 상태 넘김
+
+inline StudentState *StudentStateMaker::makeNewState(int _period) {
+	float ran = random();
+	int period = GameM::getIns().getPeriod();
+	switch (_period) {
+	case 1:
+		return new DropPaperStudentState();
+		break;
+	case 2:
+		if (ran < .3f) {
+			return new DropPaperStudentState();
+		} else if (ran < .6f) {
+			return new DropPaperStudentState();
+		}
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	}
+}
