@@ -181,7 +181,7 @@ float random(float a) {
 int random(int a, int b) {
 	return rand() % (b - a) + a;
 }
-
+// 0~a-1 사이의 정수
 int random(int a) {
 	return rand() % a;
 }

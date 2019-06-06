@@ -75,6 +75,12 @@
     <ClInclude Include="SoundM.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="AnimSpriteSheet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimSpriteByImages.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KeyM.cpp">
@@ -123,6 +129,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SoundM.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimSpriteSheet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimSpriteByImages.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,5 +27,7 @@ public:
 	void flip();
 
 	Student *getStudent() { return sitStudent; }
+
+	void render(HDC h);
 };
 

@@ -12,6 +12,7 @@
 #include <memory>
 #include <cassert>
 #include <Commdlg.h>
+#include "SoundM.h"
 
 #define DBOUT( s )            \
 {                             \
