@@ -17,7 +17,20 @@ class GameM : public Singleton<GameM>{
 
 	clock_t begin, passClock;
 
-	int giveAngryTimer;
+	int giveAngryTimer = -1;
+	int roundStartDelayTimer = 0; // 라운드시작할때마다 얘들 이상징후없이 시작하게하려고 만듬
+
+	vector<CImage *>roundImgs;
+	int roundTimer;
+
+	int angryDelay = 3000;
+
+	bool isEnd = false;
+
+	int classroomSizeX = 464*2;
+	int watchClassIdx = 0;
+	float lerpOffX = 0;
+
 public:
 	GameM();
 	~GameM();
@@ -34,11 +47,13 @@ public:
 
 	// 일정 시간이 지나면 학생들중에 한명이 이상징후가짐
 	void giveWithDelayAngry();
+
+	void broadcastRound(int round);
 	
 	float getTime() { return time; }
 	int getPeriod() { return period; }
 	size_t getStudentSize();
-	Student *getStudent(int idx);
+	//Student *getStudent(int idx);
 	Classroom *getClassroom(int i) { return &classrooms [i]; }
 };
 

@@ -1,5 +1,6 @@
 #include "GameInputM.h"
 #include "ClickObj.h"
+#include "KeyM.h"
 
 
 GameInputM::GameInputM() {
@@ -20,6 +21,7 @@ void GameInputM::removeClickObj(ClickObj *obj) {
 		for (size_t i = 0; i < size; i++) {
 			if (clickObjs [i] == obj) {
 				clickObjs.erase(clickObjs.begin() + i);
+				--size;
 			}
 		}
 }
@@ -40,9 +42,9 @@ void GameInputM::tick() {
 	bool bOnceDown = keyInst->OnceKeyDown(VK_LBUTTON);
 	bool bStayDown = keyInst->StayKeyDown(VK_LBUTTON);
 	bool bOnceUp = keyInst->OnceKeyUp(VK_LBUTTON);
-	size_t size = clickObjs.size();
+	int size = (int)clickObjs.size();
 	if (bOnceDown || bStayDown || bOnceUp) {
-		for (size_t i = 0; i < size; i++) {
+		for (int i = size-1; i >= 0; i--) {
 			if (clickObjs [i]->isMouseOver(x, y)) {
 				if (bOnceDown) clickObjs [i]->onceDown();
 				if (bStayDown) clickObjs [i]->stayDown();

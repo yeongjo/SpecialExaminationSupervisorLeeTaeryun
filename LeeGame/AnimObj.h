@@ -7,8 +7,8 @@ public:
 	~AnimSprite();
 
 
-	virtual void changeAnim(UINT i);
+	virtual void changeAnim(UINT i) {}
 
-	virtual void render(HDC h, Pos<float>& p, Pos<float> &size);
+	virtual void render(HDC h, Pos<float> &p, Pos<float> &size) {}
 };
 

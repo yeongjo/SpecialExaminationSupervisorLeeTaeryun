@@ -36,16 +36,19 @@ private:
 
 	// [0 ~ 1] 가짐
 	float angryAmount;
+	float angryUiSize = 85;
 
+	bool isHisDeskFilped = false;
+	int flipRemoveTimer = 1000;
 
 public:
 	Student();
 	~Student();
 
-	void loadImages();
+	static void loadImages();
 
 	// 학생 타입이랑, 상태설정해주기
-	void init(Student::Type type, StudentState *state);
+	void init(Student::Type type, StudentState *state, Classroom *_class);
 
 	void setState(StudentState *state);
 
@@ -59,6 +62,13 @@ public:
 	// 화남수치 오름
 	virtual void tick();
 
+	// 주변에 지속적인 피해주기
+	void action();
+
+	// 활성화해서 주변에 피해주게하기
+	// 이미활성화되있으면 false 반환
+	bool activeState();
+
 	void angryFlipDesk();
 
 	// 고민하는 소리, 말풍선
@@ -66,6 +76,7 @@ public:
 
 	virtual void render(HDC h);
 
+	bool isDestroyZone();
 	
 	Classroom *getClassroom() { return myClass; }
 	AnimSpriteByImages *getSprite() { return sprite; }
@@ -97,7 +108,8 @@ protected:
 	StudentState *myState;
 	// 영향끼칠 범위랑 양
 	float range, amount;
-	bool isAble = true;
+	// 데미지 줄때만 활성화, 해결하면 비활성화
+	bool isAble = false;
 public:
 	// 다른사람 혹은 나에게 무슨 영향을 주는지
 	// 나의 애니메이션이 어떤거로 바뀌는지 여기서 결정
@@ -105,9 +117,22 @@ public:
 	// stu는 이 함수를 실행한 친구를 줌
 	virtual void action(Student *stu);
 
+	// 활성화 이미활성화되있으면 false 리턴
+	virtual bool active();
+
 	// 상태해결조건이 맞으면 상태해결
 	// 학생에서 클릭인지 드래그중인지 상태를 가져온다.
-	void fixState(Student *stu);
+	virtual void fixState(Student *stu);
+
+	void alwaysFixState(Student *stu){
+		isAble = false;
+	}
+
+protected:
+	void fix(Student *stu) {
+		isAble = false;
+		stu->getSprite()->changeAnim(0);
+	}
 };
 
 // 시험지 교체해달라하는 상태
@@ -118,32 +143,52 @@ public:
 
 class DropPaperStudentState : public StudentState {
 public:
-	DropPaperStudentState() { range = 0; amount = 0.01f; }
+	DropPaperStudentState() { range = 0; amount = 0.05f; }
 	virtual void action(Student *stu);
-	void fixState(Student *stu);
 };
 
-class WantChangePaperStudentState : public DropPaperStudentState {
+class WantChangePaperStudentState : public StudentState {
 public:
 	WantChangePaperStudentState() { range = 0; amount = 0.01f; }
 	virtual void action(Student *stu);
-	void fixState(Student *stu);
+	virtual void fixState(Student *stu);
+};
+
+class SleepStudentState : public StudentState {
+public:
+	SleepStudentState() { range = 300; amount = 0.05f; }
+	virtual void action(Student *stu);
+	//void fixState(Student *stu);
+};
+
+class DanceStudentState : public StudentState {
+public:
+	DanceStudentState() { range = 300; amount = 0.05f; }
+	virtual void action(Student *stu);
+	//void fixState(Student *stu);
 };
 
 // 특수 상태
 class KindStudentState :public StudentState{
 	virtual void action(Student *stu) {}
+	virtual bool active() { return true; }
 };
 
 // 컨닝하기
 class SpyStudentState : public StudentState {
 	Student *targetStu;
 public:
-	virtual void action(Student *stu); // TODO 애니메이션 인덱스를 몰라서 추가못함
+	SpyStudentState(Student *_targetStu) : targetStu(_targetStu){range = 0; amount = 0.1f;}
+	virtual bool active() {
+		bool _t = isAble;
+		isAble = true;
+		return !_t;
+	}
+	virtual void action(Student *stu);
 };
 
 class StudentStateMaker {
 public:
 	// 랜덤으로 각 교시에 맞는 상태 넘김
-	static StudentState *makeNewState(int period);
+	static StudentState *makeNewState();
 };

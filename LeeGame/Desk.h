@@ -1,6 +1,6 @@
 #pragma once
 #include "Guy.h"
-class Student; class AnimSprite;
+class Student; class AnimSpriteByImages;
 class Desk : public Obj{
 
 	// TODO 책상엔 시험지가 있고 떨어지면 줍거나 교체할수있음
@@ -12,7 +12,7 @@ class Desk : public Obj{
 		int state = 0;
 	};
 	TestPaper testPaper;
-	AnimSprite* anim;
+	AnimSpriteByImages* anim;
 	Student *sitStudent; // 앉아있는 학생 일어날수도 있음
 	// 학생도 Desk 참조해서 엎기
 public:

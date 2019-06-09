@@ -9,6 +9,7 @@
 class Guy : public ClickObj {
 
 	int remainDragStayTime;
+	Pos<float> prevDragPos;
 public:
 	Guy();
 	~Guy();
@@ -18,6 +19,9 @@ public:
 	virtual void onceUp();
 
 	virtual void drag();
+
+	// 드랍하면 부숴지는곳
+	virtual bool isDestroyZone() = 0;
 };
 
 // TODO 클릭할수있는지 없는지를 인터페이스로 써야할듯

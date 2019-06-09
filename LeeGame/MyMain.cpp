@@ -1,4 +1,5 @@
 #include "MyMain.h"
+#include "MTimer.h"
 
 RECT rectView;
 WindowM win;
@@ -124,6 +125,20 @@ bool collPointRect(int x, int y, RECT *rt) {
 	return false;
 }
 
+bool collPointRect(Pos<float>& p, RECT *rt) {
+	if ((rt->left <= p.x && p.x <= rt->right) &&
+		(rt->top <= p.y && p.y <= rt->bottom))
+		return true;
+	return false;
+}
+
+bool collRectRect(Pos<float> p1, Pos<float> s1, Pos<float> p2, Pos<float> s2) {
+	if ((p1.x > p2.x + s2.x || p1.x + s1.x < p2.x) ||
+		(p1.y > p2.y + s2.y || p1.y + s1.y < p2.y))
+		return false;
+	return true;
+}
+
 
 Pos<> CollCircleRect(int x, int y, int r, RECT *rt) {
 	if ((rt->left <= x && x <= rt->right) ||
@@ -190,12 +205,13 @@ Pos<float> randomCircle(float size) {
 	return Pos<float>(random(size), random(size));
 }
 
+// 0~range - 1
 vector<int> unDuplicateRandom(size_t count, int range) {
 	vector<int> t(count * 2);
 	for (size_t i = 0; i < count; ) {
 		t [i] = rand() % range;
-		if (t [i + count] == 0) {
-			t [i + count] = 1;
+		if (t [t [i] + count] == 0) {
+			t [t [i] + count] = 1;
 			i++;
 		}
 	}
@@ -216,7 +232,7 @@ inline void Manager::addToM(int layer) {
 }
 
 inline void Obj::render(HDC hdc) {
-	renderRect(hdc, static_cast<int>(p.x), static_cast<int>(p.y), (int)size.x, (int)size.y, RGB(20, 20, 20));
+	renderRect(hdc, static_cast<int>(p.x), static_cast<int>(p.y), (int)size.x, (int)size.y, RGB(255, 255, 0));
 }
 
 inline int Obj::collObj(Obj *o) {
@@ -244,11 +260,12 @@ inline SceneM &SceneM::getIns(size_t i) {
 void SceneM::tick() {
 	size_t s1 = objs.size();
 	for (size_t i = 0; i < s1; i++) {
-		size_t s2 = objs [i].size();
-		for (size_t j = 0; j < s2; j++) {
+		//size_t s2 = objs [i].size();
+		for (size_t j = 0; j < objs [i].size(); j++) {
 			objs [i][j]->tick();
 		}
 	}
+	MTimer::tick(deltatime);
 }
 
 inline void SceneM::render(HDC hdc) {
@@ -272,6 +289,7 @@ void SceneM::destoryObj(Manager *obj) {
 				// 스스로 delete 됬을때만 이곳으로 오기때문에 delete 안해도됨
 				//delete t;
 				objs[i].erase(objs[i].begin() + j);
+				--s2;
 				return;
 			}
 		}
@@ -286,8 +304,6 @@ inline void SceneM::reset() {
 		objs [i].clear();
 	}
 }
-
-// TODO 줄일때 기존에것들 안지우고 줄임 나중에 추가하기
 
 inline void SceneM::resizeLayer(int layerCount) {
 	objs.resize(layerCount);

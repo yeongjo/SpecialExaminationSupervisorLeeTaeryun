@@ -6,7 +6,6 @@
 #include "framework.h"
 #include "LeeGame.h"
 #include "UI.h"
-#include "MergeCpp.h"
 #include "MergeCpp.cpp"
 
 #define MAX_LOADSTRING 100
@@ -101,7 +100,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      0, 0, 467*2, 426*2+60, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -115,8 +114,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 bool isGamePlayScene = true;
-constexpr int dbStartPosX = 100;
-constexpr int dbStartPosY = 100;
+constexpr int dbStartPosX = 0;
+constexpr int dbStartPosY = 0;
 Pos<> dbStartPos = Pos<>(dbStartPosX,dbStartPosY);
 
 void init(HWND hWnd) {
@@ -126,7 +125,6 @@ void init(HWND hWnd) {
 	//학생 140, 163 / x210, y215
 	// 70, 52
 	//시계 218, 81
-	// TODO layout 학생위치 책상위치, 교실위치 정해야함
 	win.init(hWnd, classroomX,classroomY);
 	GameInputM::getIns().init(hWnd, &dbStartPos);
 
@@ -138,8 +136,6 @@ void init(HWND hWnd) {
 void update() {
 	GameM::getIns().update();
 }
-
-ClockObj co(218, 81);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -183,7 +179,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 // TODO 메인화면 추가해야함
 				;
 
-			// TODO Layout 100, 100 아래부터 렌더
 			win.postrender(dbStartPosX,dbStartPosY);
             EndPaint(hWnd, &ps);
         }
@@ -191,10 +186,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
     }
-    return 0;
+    return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 // 정보 대화 상자의 메시지 처리기입니다.

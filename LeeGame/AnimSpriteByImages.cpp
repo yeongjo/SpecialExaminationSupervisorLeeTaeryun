@@ -1,12 +1,14 @@
 #include "AnimSpriteByImages.h"
 #include <atlimage.h>
 
+BLENDFUNCTION AnimSpriteByImages::blend = {AC_SRC_OVER, 0,255,AC_SRC_ALPHA};
+
 void AnimSpriteByImages::init(vector<vector<wstring>> &imgNames) {
 	imgs.resize(imgNames.size());
 	for (size_t i = 0; i < imgNames.size(); i++) {
 		for (size_t j = 0; j < imgNames[i].size(); j++) {
 			auto t_image = new CImage();
-			assert(FAILED(t_image->Load(imgNames [i][j].c_str())));
+			assert(!FAILED(t_image->Load(imgNames [i][j].c_str())));
 			auto t = new FrameBlock(t_image, 100);
 			imgs[i].push_back(t);
 		}
@@ -38,5 +40,8 @@ void AnimSpriteByImages::changeAnim(UINT i) {
 }
 
 void AnimSpriteByImages::render(HDC h, Pos<float> &p, Pos<float> &size) {
-	imgs [imgIdx][subImgIdx]->img->StretchBlt(h, p.x, p.y, size.x, size.y, SRCCOPY);
+	// TODO 이어서 해야함
+	int width = imgs [imgIdx][subImgIdx]->img->GetWidth();
+	int height = imgs [imgIdx][subImgIdx]->img->GetHeight();
+	imgs [imgIdx][subImgIdx]->img->AlphaBlend(h, p.x, p.y, size.x, size.y, 0, 0, width, height, 255,AC_SRC_OVER);
 }
