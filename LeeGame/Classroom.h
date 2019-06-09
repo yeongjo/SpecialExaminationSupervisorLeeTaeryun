@@ -3,6 +3,9 @@
 #include "Student.h"
 using namespace std;
 
+constexpr int classroomX = 464*2;
+constexpr int classroomY = 426*2;
+
 // 교실
 
 // GameM에서 가지고있음
@@ -20,6 +23,7 @@ class Classroom : public Obj{
 	// 학생을 상속받는 사이코가 있을거라 포인터로 함
 	vector<Student*> students;
 	vector<Desk *> desks;
+	static CImage *img;
 public:
 	Classroom();
 	~Classroom();

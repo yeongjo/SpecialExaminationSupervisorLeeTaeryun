@@ -1,5 +1,5 @@
 #pragma once
-#include "AnimObj.h"
+#include "AnimSpriteByImages.h"
 
 class StudentState; class Classroom;
 
@@ -23,7 +23,8 @@ private:
 	// 1 : 가만히 있는거
 	// 2 : 머리흔드는거
 
-	AnimSprite sprite; // TODO 초기화해야함 사진 불러오고 set UV
+	static AnimSpriteByImages* preloadSprite[4];
+	AnimSpriteByImages *sprite;
 
 	Type type; // GameM가 init 함수를 통해 설정해줌
 
@@ -40,6 +41,8 @@ private:
 public:
 	Student();
 	~Student();
+
+	void loadImages();
 
 	// 학생 타입이랑, 상태설정해주기
 	void init(Student::Type type, StudentState *state);
@@ -65,7 +68,7 @@ public:
 
 	
 	Classroom *getClassroom() { return myClass; }
-	AnimSprite *getSprite() { return &sprite; }
+	AnimSpriteByImages *getSprite() { return sprite; }
 
 	enum class Type {
 		normal, //  ㅄ

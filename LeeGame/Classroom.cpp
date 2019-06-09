@@ -1,6 +1,6 @@
 #include "Classroom.h"
 
-
+CImage *Classroom::img = nullptr;
 Classroom::Classroom() {
 }
 
@@ -9,9 +9,14 @@ Classroom::~Classroom() {
 }
 
 void Classroom::init(int idx) {
-	//TODO layout
-	size.set(500, 500);
-	p.set((idx-1) * size.x, 100);
+	
+	if (img == nullptr) {
+		img = new CImage();
+		assert(FAILED(img->Load(L"img/class.jpg")));
+	}
+
+	size.set(classroomX, classroomY);
+	p.set((idx-1) * size.x, 0);
 
 	constexpr int studentCount = 9;
 	desks.clear();
@@ -40,10 +45,10 @@ void Classroom::init(int idx) {
 		// Type, State
 		students [i]->init(types[ran[i]],states[ran[i]]);
 
-		// TODO layout 학생간격을 설정함
-		int leftUpOff = 100;
-		int xGap = 80, yGap = 80;
-		int x = p.x +leftUpOff+ i % 3 * xGap, y = p.y+leftUpOff + i / 3 * yGap;
+		int leftOff = 140*2;
+		int upOff = 163*2;
+		int xGap = 70*2, yGap = 52*2;
+		int x = p.x +leftOff+ i % 3 * xGap, y = p.y+upOff + i / 3 * yGap;
 		desks [i]->init(students[i], x, y);
 	}
 }
@@ -65,7 +70,7 @@ void Classroom::removeStudent(int i) {
 }
 
 void Classroom::render(HDC h) {
-
+	img->StretchBlt(h, p.x, p.y, size.x, size.y, SRCCOPY);
 }
 
 size_t Classroom::getStudentSize() {

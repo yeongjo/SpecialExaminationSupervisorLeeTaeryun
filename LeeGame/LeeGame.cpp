@@ -121,9 +121,13 @@ Pos<> dbStartPos = Pos<>(dbStartPosX,dbStartPosY);
 
 void init(HWND hWnd) {
 	//SceneM::init();
-
+	//교실 464, 426
+	//책상 139, 186
+	//학생 140, 163 / x210, y215
+	// 70, 52
+	//시계 218, 81
 	// TODO layout 학생위치 책상위치, 교실위치 정해야함
-	win.init(hWnd, 500,500);
+	win.init(hWnd, classroomX,classroomY);
 	GameInputM::getIns().init(hWnd, &dbStartPos);
 
 	// TODO 게임시작했을때 불리게하기
@@ -135,7 +139,7 @@ void update() {
 	GameM::getIns().update();
 }
 
-ClockObj co(100,150);
+ClockObj co(218, 81);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
