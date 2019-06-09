@@ -7,6 +7,7 @@ ClockObj::ClockObj(int x, int y) : Obj(1) {
 	p.set(x, y);
 	size.set(29*2, 31*2);
 	loadImg();
+	time = (GameM::getIns().getTime()-1) * 90.f;
 }
 
 
@@ -17,6 +18,7 @@ inline void ClockObj::loadImg() {
 	if (clockImg) return;
 	clockImg = new CImage();
 	assert(SUCCEEDED(clockImg->Load(L"img/clock.png")));
+	
 }
 
 inline void ClockObj::tick() {
@@ -34,7 +36,7 @@ inline void ClockObj::render(HDC _h, int _xOff, int _yOff) {
 
 	HBRUSH brush = (HBRUSH)CreateSolidBrush(RGB(202,9,63));
 	HBRUSH old = (HBRUSH)SelectObject(_h, brush);
-	Pie(_h, x, y, x + w, y + h, center.x + (int)_sin, center.y + (int)_cos, center.x, y);
+	Pie(_h, x, y, x + w, y + h, center.x + (int)_sin, center.y + (int)_cos, center.x-1, y);
 	SelectObject(_h, old);
 	DeleteObject(brush);
 

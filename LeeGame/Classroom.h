@@ -27,8 +27,9 @@ class Classroom : public Obj{
 	vector<Desk *> desks;
 	static CImage *img;
 
+	bool isInit = false;
 public:
-	TestPaper *paper;
+	TestPaper *paper = nullptr;
 	
 	Classroom();
 	~Classroom();
@@ -89,6 +90,16 @@ public:
 			lastDragDropPos = p;
 		}
 		Guy::onceUp();
+	}
+	void onceDown() {
+		Guy::onceDown();
+		SoundM::paperDrop();
+	}
+	void onceUpWithOutMouseCheck() {
+		if (isDraging) {
+		SoundM::paperDrop();
+	}
+	Guy::onceUpWithOutMouseCheck();
 	}
 
 	bool isDestroyZone() { return false; }

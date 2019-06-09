@@ -19,7 +19,7 @@ Classroom::~Classroom() {
 }
 
 void Classroom::init(int idx) {
-	
+	isInit = true;
 	if (img == nullptr) {
 		img = new CImage();
 		assert(!FAILED(img->Load(L"img/class.jpg")));
@@ -31,6 +31,10 @@ void Classroom::init(int idx) {
 
 
 	constexpr int studentCount = 9;
+	for (size_t i = 0; i < desks.size(); i++)
+		delete desks [i];
+	for (size_t i = 0; i < students.size(); i++)
+		delete students [i];
 	desks.clear();
 	desks.resize(studentCount);
 	students.clear();
@@ -63,7 +67,10 @@ void Classroom::init(int idx) {
 		int x = p.x +leftOff+ i % 3 * xGap, y = p.y+upOff + i / 3 * yGap;
 		desks [i]->init(students[i], x, y);
 	}
-	paper = new TestPaper(p);
+	if(!paper)
+		paper = new TestPaper(p);
+
+	isInit = false;
 }
 
 void Classroom::makeAngryStudentInClass(Student *stu, float amount, float range) {
@@ -78,14 +85,17 @@ void Classroom::makeAngryStudentInClass(Student *stu, float amount, float range)
 //}
 
 void Classroom::removeStudent(int i) {
+	if (isInit) return;
 	delete students [i];
 	students.erase(students.begin() + i);
 }
 
 void Classroom::removeStudent(Student *stu) {
+	if (isInit) return;
 	for (size_t i = 0; i < students.size(); i++) {
 		if (students [i] == stu) {
 			students.erase(students.begin() + i);
+			
 			return;
 		}
 	}

@@ -13,11 +13,18 @@ GameM::GameM() {
 GameM::~GameM() {
 }
 
+void GameM::loadImg() {
+	if (gameoverImg) return;
+	gameoverImg = new CImage();
+	gameoverImg->Load(L"");
+}
+
 void GameM::init() {
-
-
+	flipStudentCount = 0;
+	isEnd = false;
 	period = 1;
 	time = 1;
+	passClock = 0;
 	// 교실사이즈 3고정
 	classrooms.resize(3);
 	for (size_t i = 0; i < classrooms.size(); i++) {
@@ -54,8 +61,30 @@ void GameM::init() {
 }
 
 void GameM::update() {
+	if (!isGamePlayScene) return;
+
+	if (isEnd && KeyM::GetInst()->OnceKeyUp(VK_LBUTTON)) {
+		init();
+	}
+
 	SoundM::update();
-	SceneM::getIns(0).tick();
+	SceneM::tick();
+
+	// key
+	// a
+	if (KeyM::GetInst()->OnceKeyDown(0x41)) {
+		if (watchClassIdx != -1) watchClassIdx--;
+		lerpOffX = -classroomSizeX*watchClassIdx;
+	//d
+	}else if (KeyM::GetInst()->OnceKeyDown(0x44)) {
+		if (watchClassIdx != 1) watchClassIdx++;
+		lerpOffX = -classroomSizeX*watchClassIdx;
+	}
+
+	for (size_t i = 0; i < classrooms.size(); i++) {
+		float _off = (lerpOffX - classrooms [i].off.x)*.15f;
+		classrooms [i].changeOffX(_off);
+	}
 	if (isEnd) return;
 	//passClock = clock() - begin;
 	passClock += deltatime;
@@ -73,6 +102,7 @@ void GameM::update() {
 		DBOUT(period << L"교시 끝\n")
 		if (period == 4) { // 4교시가 다 끝남
 			isEnd = true;
+			SceneM::changeScene(1);
 			return;
 		}
 		period++;
@@ -85,21 +115,8 @@ void GameM::update() {
 		nextPeriodEffect();
 	}
 
-	// key
-	// a
-	if (KeyM::GetInst()->OnceKeyDown(0x41)) {
-		if (watchClassIdx != -1) watchClassIdx--;
-		lerpOffX = -classroomSizeX*watchClassIdx;
-	//d
-	}else if (KeyM::GetInst()->OnceKeyDown(0x44)) {
-		if (watchClassIdx != 1) watchClassIdx++;
-		lerpOffX = -classroomSizeX*watchClassIdx;
-		
-	}
-	for (size_t i = 0; i < classrooms.size(); i++) {
-		float _off = (lerpOffX - classrooms [i].off.x)*.1f;
-		classrooms [i].changeOffX(_off);
-	}
+	
+	
 }
 
 void GameM::nextPeriodEffect() {
@@ -148,6 +165,18 @@ void GameM::giveWithDelayAngry() {
 
 void GameM::broadcastRound(int round) {
 	UI::getIns().broadcastRound(round);
+}
+
+void GameM::gameover() {
+	UI::getIns().broadcastGameover();
+	isEnd = true;
+}
+
+inline void GameM::increaseFlipStudent() { 
+	flipStudentCount++; 
+	if (flipStudentCount >= 6) {
+		gameover();
+	}
 }
 
 size_t GameM::getStudentSize() {

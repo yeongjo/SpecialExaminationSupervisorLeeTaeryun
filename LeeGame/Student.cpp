@@ -63,6 +63,13 @@ void Student::resetState() {
 	state->fixState(this);
 }
 
+void Student::onceUpWithOutMouseCheck() {
+	if (isDraging) {
+		SoundM::studentDrop();
+	}
+	Guy::onceUpWithOutMouseCheck();
+}
+
 void Student::tick() {
 	sprite->tick(deltatime);
 	if (state != nullptr) state->fixState(this);
@@ -92,6 +99,7 @@ void Student::angryFlipDesk() {
 		delete state;
 		state = nullptr;
 	}
+	GameM::getIns().increaseFlipStudent();
 	sprite->changeAnim(2);
 	isHisDeskFilped = true;
 	SoundM::flip();
@@ -114,7 +122,7 @@ void Student::render(HDC h) {
 
 bool Student::isDestroyZone() {
 	auto _class = getClassroom();
-	RECT rt = {_class->p.x, _class->p.y, _class->p.x+_class->size.x * .2f, _class->p.y+_class->size.y};
+	RECT rt = {_class->p.x, _class->p.y, _class->p.x+_class->size.x * .12f, _class->p.y+_class->size.y};
 	return collPointRect(p.x, p.y, &rt);
 	//return false;
 }
@@ -142,6 +150,7 @@ void SpyStudentState::action(Student *stu) {
 void DropPaperStudentState::action(Student *stu) {
 	if (!isAble) return;
 	stu->getSprite()->changeAnim(1);
+	stu->sitDesk->changeTestPaperState(2);
 	stu->takeAngryDamage(amount);
 }
 
@@ -192,7 +201,7 @@ void WantChangePaperStudentState::action(Student *stu) {
 }
 
 void WantChangePaperStudentState::fixState(Student *stu) {
-	RECT rt = {stu->p.x+stu->off.x, stu->p.y, stu->p.x+stu->off.x+stu->size.x, stu->p.y+stu->size.y};
+	RECT rt = {stu->p.x, stu->p.y, stu->p.x+stu->size.x, stu->p.y+stu->size.y};
 	Pos<float> _paperPos = stu->getClassroom()->paper->lastDragDropPos + stu->getClassroom()->paper->size * .5f;
 	if (collPointRect(_paperPos, &rt)) {
 		fix(stu);
@@ -202,6 +211,9 @@ void WantChangePaperStudentState::fixState(Student *stu) {
 
 void SleepStudentState::action(Student *stu) {
 	if (!isAble) return;
+	if (isPlaying) return;
+	isPlaying = true;
+	SoundM::sleep();
 	stu->getSprite()->changeAnim(4);
 	stu->getClassroom()->makeAngryStudentInClass(stu, amount, range);
 }

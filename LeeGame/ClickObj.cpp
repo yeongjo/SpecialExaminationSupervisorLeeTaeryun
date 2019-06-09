@@ -2,7 +2,7 @@
 #include "GameInputM.h"
 
 
-ClickObj::ClickObj() : Obj() {
+ClickObj::ClickObj(int layer) : Obj(layer) {
 	GameInputM::getIns().addClickObj(this);
 }
 

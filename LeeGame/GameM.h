@@ -31,9 +31,17 @@ class GameM : public Singleton<GameM>{
 	int watchClassIdx = 0;
 	float lerpOffX = 0;
 
+	int flipStudentCount;
+
+	CImage *gameoverImg = nullptr;
+
 public:
+	bool isGamePlayScene = true;
+	
 	GameM();
 	~GameM();
+
+	void loadImg();
 
 	// 교실과 학생, 시간 초기화
 	void init();
@@ -50,6 +58,9 @@ public:
 
 	void broadcastRound(int round);
 	
+	void gameover();
+
+	void increaseFlipStudent();
 	float getTime() { return time; }
 	int getPeriod() { return period; }
 	size_t getStudentSize();

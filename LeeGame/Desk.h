@@ -7,17 +7,20 @@ class Desk : public Obj{
 	class TestPaper {
 	public:
 		// 0: 노멀
-		// 1: 떨어트림
+		// 2: 떨어트림
 		// 2: 잘못적어서 교체해달라할거임
 		int state = 0;
 	};
-	TestPaper testPaper;
 	AnimSpriteByImages* anim;
 	Student *sitStudent; // 앉아있는 학생 일어날수도 있음
 	// 학생도 Desk 참조해서 엎기
 public:
+	TestPaper testPaper;
+
 	Desk();
 	~Desk();
+
+	void changeTestPaperState(int state);
 
 	// GameM으로 부터 학생 받기
 	// 학생에 sitDesk에 자기를 줌

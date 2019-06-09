@@ -32,11 +32,24 @@ public:
 		//FMOD_LOOP_NORMAL
 		sterma(sound[0], "sound/책상엎고 나가기.mp3", false);
 	}
-	static void destroySound() {
-
-	}
 	static void flip() {
 		sterma(sound[0], "sound/책상엎고 나가기.mp3", false);
+	}
+
+	static void sleep() {
+
+	}
+
+	static void stopSleep() {
+
+	}
+
+	static void paperDrop() {
+
+	}
+
+	static void studentDrop() {
+
 	}
 
 private:

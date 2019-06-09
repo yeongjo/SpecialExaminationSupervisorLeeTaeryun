@@ -14,8 +14,7 @@ class Student : public Guy {
 public:
 	enum class Type;
 private:
-	// 위치 참조할때도 필요
-	Desk *sitDesk; // 엎어버릴때 필요
+	
 
 	Classroom *myClass; // 교실에 피해끼칠때필요
 
@@ -42,6 +41,9 @@ private:
 	int flipRemoveTimer = 1000;
 
 public:
+	// 위치 참조할때도 필요
+	Desk *sitDesk; // 엎어버릴때 필요
+
 	Student();
 	~Student();
 
@@ -77,6 +79,12 @@ public:
 	virtual void render(HDC h);
 
 	bool isDestroyZone();
+
+	void onceDown() {
+		Guy::onceDown();
+		SoundM::studentDrop();
+	}
+	void onceUpWithOutMouseCheck();
 	
 	Classroom *getClassroom() { return myClass; }
 	AnimSpriteByImages *getSprite() { return sprite; }
@@ -128,8 +136,9 @@ public:
 		isAble = false;
 	}
 
+
 protected:
-	void fix(Student *stu) {
+	virtual void fix(Student *stu) {
 		isAble = false;
 		stu->getSprite()->changeAnim(0);
 	}
@@ -145,20 +154,29 @@ class DropPaperStudentState : public StudentState {
 public:
 	DropPaperStudentState() { range = 0; amount = 0.05f; }
 	virtual void action(Student *stu);
+	virtual void fix(Student *stu) {
+		StudentState::fix(stu);
+		stu->sitDesk->changeTestPaperState(0);
+	}
 };
 
 class WantChangePaperStudentState : public StudentState {
 public:
-	WantChangePaperStudentState() { range = 0; amount = 0.01f; }
+	WantChangePaperStudentState() { range = 0; amount = 0.05f; }
 	virtual void action(Student *stu);
 	virtual void fixState(Student *stu);
 };
 
 class SleepStudentState : public StudentState {
+	bool isPlaying = false;
 public:
 	SleepStudentState() { range = 300; amount = 0.05f; }
 	virtual void action(Student *stu);
 	//void fixState(Student *stu);
+	virtual void fix(Student *stu) {
+		StudentState::fix(stu);
+		SoundM::stopSleep();
+	}
 };
 
 class DanceStudentState : public StudentState {
