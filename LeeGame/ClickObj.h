@@ -20,7 +20,11 @@ public:
 	virtual void stayDown() = 0;
 	virtual void onceUp() = 0;
 
-	bool getIsMouseDown() { return isMouseDown; }
+	bool getIsMouseDown() { 
+		bool _t = isMouseDown;
+		isMouseDown = false;
+		return _t; 
+	}
 	bool getIsMouseStay() { return isMouseStay; }
 
 	// 그냥 조건 상관없이 업데이트에서 불러주기

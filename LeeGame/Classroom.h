@@ -6,6 +6,8 @@ using namespace std;
 constexpr int classroomX = 464*2;
 constexpr int classroomY = 426*2;
 
+class TestPaper;
+
 // 교실
 
 // GameM에서 가지고있음
@@ -24,7 +26,10 @@ class Classroom : public Obj{
 	vector<Student*> students;
 	vector<Desk *> desks;
 	static CImage *img;
+
 public:
+	TestPaper *paper;
+	
 	Classroom();
 	~Classroom();
 
@@ -39,9 +44,14 @@ public:
 	// 다른사람들을 화나게하고싶을때 호출
 	// stu에는 이 사람을 제외한 사람이 화나게 한다. 보통은 본인으로
 	void makeAngryStudentInClass(Student *stu, float amount, float range);
-	void makeAngryThisStuent(Student *stu, float amount);
+	//void makeAngryThisStuent(Student *stu, float amount);
 
 	void removeStudent(int i);
+	void removeStudent(Student *stu);
+
+	void changeOffX(float _x);
+
+	void tick();
 
 	// TODO 이미지 그리기
 	virtual void render(HDC h);
@@ -51,3 +61,35 @@ public:
 	Student *getStudent(int i) { return students [i]; }
 };
 
+class TestPaper : public Guy{
+public:
+	Pos<float> lastDragDropPos;
+	static CImage *img;
+
+	static void loadImg() {
+		if (img) return;
+		img = new CImage();
+		img->Load(L"img/testpaper.jpg");
+	}
+
+	TestPaper(Pos<float>& _p){
+		p = _p+Pos<float>(221*2,328*2);
+		loadImg();
+		size.x = img->GetWidth()<<1;
+		size.y = img->GetHeight()<<1;
+	}
+	void render(HDC h) {
+		if (!isAble) return;
+		auto t = p + off;
+		img->StretchBlt(h, t.x, t.y, size.x, size.y, SRCCOPY);
+	}
+
+	void onceUp() {
+		if (isDraging) {
+			lastDragDropPos = p;
+		}
+		Guy::onceUp();
+	}
+
+	bool isDestroyZone() { return false; }
+};

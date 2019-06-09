@@ -169,7 +169,6 @@
     <ClInclude Include="Guy.h" />
     <ClInclude Include="KeyM.h" />
     <ClInclude Include="LeeGame.h" />
-    <ClInclude Include="MergeCpp.h" />
     <ClInclude Include="MTimer.h" />
     <ClInclude Include="MyMain.h" />
     <ClInclude Include="Resource.h" />

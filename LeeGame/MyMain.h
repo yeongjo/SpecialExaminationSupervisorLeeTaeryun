@@ -24,7 +24,7 @@
 using namespace std;
 
 #define PI 3.1415926535f
-#define Radian PI/180
+#define Deg2Rad 0.0174533
 
 extern RECT rectView;
 void getWindowSize(HWND hwnd);
@@ -39,9 +39,6 @@ void renderCircle(HDC hdc, int _x, int _y, int _size = 10, COLORREF color = RGB(
 void renderRoundRect(HDC hdc, int x, int y, int sizeX, int sizeY, int w, int h, COLORREF color);
 void renderRect(HDC hdc, int _x, int _y, int _sizeX = 10, int _sizeY = 10, COLORREF color = RGB(255, 255, 0));
 void renderTriangle(HDC hdc, int x, int y, int size, COLORREF color = RGB(255, 255, 0));
-
-bool IsPointInCircle(int x, int y, int r, int px, int py);
-bool collPointRect(int x, int y, RECT *rt);
 
 template<typename TT=int>
 struct Pos{
@@ -229,6 +226,10 @@ public:
 
 // 원기준으로 사각형방향 반환
 Pos<> CollCircleRect(int x, int y, int r, RECT *rt);
+bool IsPointInCircle(int x, int y, int r, int px, int py);
+bool collPointRect(int x, int y, RECT *rt);
+bool collPointRect(Pos<float>& p, RECT *rt);
+bool collRectRect(Pos<float> p1, Pos<float> s1, Pos<float> p2, Pos<float> s2);
 
 int normalize(int a);
 void setAlign(Pos<> &a, Pos<> &b);
@@ -278,7 +279,7 @@ extern int deltatime;
 
 class Manager;
 
-// TODO 임시로 SceneM 메인에선 렌더 안했다가 게임시작시에만 
+// 임시로 SceneM 메인에선 렌더 안했다가 게임시작시에만 
 class SceneM {
 	friend Manager;
 
@@ -342,9 +343,9 @@ public:
 	virtual void tick () {}
 	virtual void render(HDC hdc);
 	virtual int collObj(Obj *o);
-};
 
-// TODO 줄일때 기존에것들 안지우고 줄임 나중에 추가하기
+	//void renderStretchBlt(HDC h, CImage *_img);
+};
 
 class MovableObj :public Obj {
 public:

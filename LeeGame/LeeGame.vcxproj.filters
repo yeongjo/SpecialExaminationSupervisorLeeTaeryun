@@ -69,9 +69,6 @@
     <ClInclude Include="MTimer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MergeCpp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SoundM.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>

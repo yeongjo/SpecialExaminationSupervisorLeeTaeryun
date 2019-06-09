@@ -32,6 +32,8 @@ class AnimSpriteByImages :
 	//imgs[imgIdx][subImgIdx] = (FrameBlock*)-1;
 	vector<vector<FrameBlock *>> imgs;
 	UINT imgIdx = 0, subImgIdx = 0;
+
+	static BLENDFUNCTION blend;
 public:
 	void init(vector<vector<wstring>> &imgNames);
 	// 시간이 지나면 자동으로 다음애니메이션으로

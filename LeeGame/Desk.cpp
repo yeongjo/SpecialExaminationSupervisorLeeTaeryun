@@ -1,11 +1,16 @@
 #include "Desk.h"
 #include "Student.h"
-#include "AnimObj.h"
+#include "AnimSpriteByImages.h"
 
 Desk::Desk() {
-	anim = new AnimSprite();
+	anim = new AnimSpriteByImages();
 	// TODO 책상 애니메이션 시트 들어오면 수정하기
-	anim->init(Pos<>(1,1));
+	vector<vector<wstring>> s;
+	s.resize(3);
+	s [0].push_back(L"img/desk_flip_0000.png");
+	s [1].push_back(L"img/desk_flip_0001.png");
+	s [2].push_back(L"img/desk_nopaper.png");
+	anim->init(s);
 }
 
 
@@ -27,5 +32,6 @@ void Desk::flip() {
 }
 
 void Desk::render(HDC h) {
-
+	auto _t = p + off;
+	anim->render(h, _t, size);
 }
