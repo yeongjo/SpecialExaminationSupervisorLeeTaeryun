@@ -3,7 +3,7 @@
 
 constexpr float float_infi = numeric_limits<float>::infinity();
 
-Guy::Guy() : ClickObj() {
+Guy::Guy(int layer) : ClickObj(layer) {
 	prevDragPos.x = float_infi;
 }
 
@@ -19,7 +19,7 @@ void Guy::onceDown() {
 void Guy::stayDown() {
 	isMouseStay = true;
 	remainDragStayTime += deltatime;
-	if (remainDragStayTime > 200 && isMouseDown) {
+	if (remainDragStayTime > 0 && isMouseDown) {
 		isDraging = true;
 		if(prevDragPos.x == float_infi)
 			prevDragPos = p;
@@ -27,6 +27,17 @@ void Guy::stayDown() {
 }
 
 void Guy::onceUp() {
+	
+}
+
+void Guy::drag() {
+	if (!isDraging)return;
+	
+	auto t = GameInputM::getIns().getMousePos();
+	p.set(t.x - size.x/2 - off.x, t.y - size.y/2 - off.y);
+}
+
+inline void Guy::onceUpWithOutMouseCheck() {
 	isMouseDown = false;
 	isMouseStay = false;
 	if (isDraging) { // 드래그 놓음
@@ -40,11 +51,4 @@ void Guy::onceUp() {
 	}
 	isDraging = false;
 	remainDragStayTime = 0;
-}
-
-void Guy::drag() {
-	if (!isDraging)return;
-	
-	auto t = GameInputM::getIns().getMousePos();
-	p.set(t.x - size.x/2 - off.x, t.y - size.y/2 - off.y);
 }

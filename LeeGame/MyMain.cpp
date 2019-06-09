@@ -224,11 +224,11 @@ inline Manager::Manager(int layer) {
 }
 
 inline Manager::~Manager() {
-	SceneM::getIns(0).destoryObj(this);
+	SceneM::getCurrentScene().destoryObj(this);
 }
 
 inline void Manager::addToM(int layer) {
-	SceneM::getIns(0).addObj(this, layer);
+	SceneM::getCurrentScene().addObj(this, layer);
 }
 
 inline void Obj::render(HDC hdc) {
@@ -257,7 +257,29 @@ inline SceneM &SceneM::getIns(size_t i) {
 	return self [i];
 }
 
+void SceneM::_tick() {
+	size_t s1 = objs.size();
+	for (size_t i = 0; i < s1; i++) {
+		//size_t s2 = objs [i].size();
+		for (size_t j = 0; j < objs [i].size(); j++) {
+			objs [i][j]->tick();
+		}
+	}
+	MTimer::tick(deltatime);
+}
+
+inline void SceneM::_render(HDC hdc) {
+	size_t s1 = objs.size();
+	for (size_t i = 0; i < s1; i++) {
+		size_t s2 = objs [i].size();
+		for (size_t j = 0; j < s2; j++) {
+			objs [i][j]->render(hdc);
+		}
+	}
+}
+
 void SceneM::tick() {
+	auto &objs = getIns(sceneIdx).objs;
 	size_t s1 = objs.size();
 	for (size_t i = 0; i < s1; i++) {
 		//size_t s2 = objs [i].size();
@@ -269,6 +291,7 @@ void SceneM::tick() {
 }
 
 inline void SceneM::render(HDC hdc) {
+	auto &objs = getIns(sceneIdx).objs;
 	size_t s1 = objs.size();
 	for (size_t i = 0; i < s1; i++) {
 		size_t s2 = objs [i].size();
@@ -305,6 +328,18 @@ inline void SceneM::reset() {
 	}
 }
 
+int SceneM::createScene() {
+	self.resize(self.size() + 1);
+	return self.size()-1;
+}
+
+void SceneM::changeScene(int idx) {
+	assert(0 <= idx && idx < self.size());
+	sceneIdx = idx;
+}
+
 inline void SceneM::resizeLayer(int layerCount) {
 	objs.resize(layerCount);
 }
+
+UINT SceneM::sceneIdx = 0;

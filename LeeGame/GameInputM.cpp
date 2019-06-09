@@ -50,6 +50,9 @@ void GameInputM::tick() {
 				if (bStayDown) clickObjs [i]->stayDown();
 				if (bOnceUp) clickObjs [i]->onceUp();
 			}
+			if (bOnceUp) {
+				clickObjs [i]->onceUpWithOutMouseCheck();
+			}
 			if (bStayDown) clickObjs [i]->drag();
 		}
 	}

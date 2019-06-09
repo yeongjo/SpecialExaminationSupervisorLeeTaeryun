@@ -11,7 +11,7 @@ class Guy : public ClickObj {
 	int remainDragStayTime;
 	Pos<float> prevDragPos;
 public:
-	Guy();
+	Guy(int layer = 0);
 	~Guy();
 
 	virtual void onceDown();
@@ -19,6 +19,8 @@ public:
 	virtual void onceUp();
 
 	virtual void drag();
+
+	virtual void onceUpWithOutMouseCheck();
 
 	// 드랍하면 부숴지는곳
 	virtual bool isDestroyZone() = 0;

@@ -285,7 +285,7 @@ class SceneM {
 
 	vector<vector<Manager*>> objs;
 	static vector<SceneM> self;
-
+	static UINT sceneIdx;
 	
 
 	void addObj(Manager *obj, size_t layer);
@@ -301,12 +301,22 @@ public:
 		resizeLayer(4);
 	}
 	static SceneM &getIns(size_t i);
-	void tick ();
-	void render(HDC hdc);
+	static SceneM &getCurrentScene() {
+		return self [sceneIdx];
+	}
+	void _tick ();
+	void _render(HDC hdc);
+	static void tick ();
+	static void render(HDC hdc);
 	void destoryObj(Manager *obj);
 
 	void reset();
 
+	// 만들어진 씬 인덱스 반환
+	static int createScene();
+	static void resizeScene(int _size) { self.resize(_size); }
+	static void changeScene(int idx);
+	UINT getSceneSize() { return self.size(); }
 	// TODO 줄일때 기존에것들 안지우고 줄임 나중에 추가하기
 	void resizeLayer(int layerCount);
 };

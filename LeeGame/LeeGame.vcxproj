@@ -164,6 +164,7 @@
     <ClInclude Include="Classroom.h" />
     <ClInclude Include="ClickObj.h" />
     <ClInclude Include="ClockObj.h" />
+    <ClInclude Include="DanceGuy.h" />
     <ClInclude Include="Desk.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameInputM.h" />
@@ -204,6 +205,9 @@
     <ClCompile Include="ClockObj.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="DanceGuy.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Desk.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

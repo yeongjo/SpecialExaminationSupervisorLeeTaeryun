@@ -9,7 +9,7 @@ protected:
 	bool isMouseStay = false;
 public:
 
-	ClickObj();// GameInputM에 clickObjs에서 추가됨
+	ClickObj(int layer = 0);// GameInputM에 clickObjs에서 추가됨
 	~ClickObj(); // GameInputM에 clickObjs에서 제거됨
 
 	// 클릭할땐 ObjM에서 가장 마지막에 있는거부터 순서대로 검사해야함
@@ -19,6 +19,8 @@ public:
 	virtual void onceDown() = 0;
 	virtual void stayDown() = 0;
 	virtual void onceUp() = 0;
+
+	virtual void onceUpWithOutMouseCheck() {}
 
 	bool getIsMouseDown() { 
 		bool _t = isMouseDown;

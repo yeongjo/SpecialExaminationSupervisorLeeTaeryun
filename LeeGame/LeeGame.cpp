@@ -113,10 +113,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-bool isGamePlayScene = true;
+
 constexpr int dbStartPosX = 0;
 constexpr int dbStartPosY = 0;
 Pos<> dbStartPos = Pos<>(dbStartPosX,dbStartPosY);
+
+void makeFinalScene() {
+	SceneM::changeScene(1);
+
+	SceneM::changeScene(0);
+}
 
 void init(HWND hWnd) {
 	//SceneM::init();
@@ -126,11 +132,14 @@ void init(HWND hWnd) {
 	// 70, 52
 	//시계 218, 81
 	win.init(hWnd, classroomX,classroomY);
+	SceneM::resizeScene(2);
+	
 	GameInputM::getIns().init(hWnd, &dbStartPos);
+
 
 	// TODO 게임시작했을때 불리게하기
 	GameM::getIns().init();
-
+	makeFinalScene();
 }
 
 void update() {
@@ -173,8 +182,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			HDC h = win.prerender(hdc);
 
 			// 게임시작시에만 렌더 메인화면갔을땐 안보이게
-			if (isGamePlayScene)
-				SceneM::getIns(0).render(h);
+			if (GameM::getIns().isGamePlayScene)
+				SceneM::render(h);
 			else
 // TODO 메인화면 추가해야함
 				;

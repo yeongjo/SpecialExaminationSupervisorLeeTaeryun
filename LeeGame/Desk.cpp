@@ -17,6 +17,13 @@ Desk::Desk() {
 Desk::~Desk() {
 }
 
+inline void Desk::changeTestPaperState(int state) {
+	if (state == testPaper.state) return;
+	testPaper.state = state;
+	anim->changeAnim(state);
+	SoundM::paperDrop();
+}
+
 void Desk::init(Student *stu, int x, int y) {
 	sitStudent = stu;
 	sitStudent->sitDesk = this;
