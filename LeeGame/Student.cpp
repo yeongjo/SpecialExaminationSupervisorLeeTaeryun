@@ -73,6 +73,7 @@ void Student::tick() {
 			delete this;
 		}
 	}
+	
 }
 
 void Student::action() {
@@ -98,6 +99,7 @@ void Student::angryFlipDesk() {
 
 void Student::annoySound() {
 	// °í¹ÎÇÏ´Â ¼Ò¸® , ¸»Ç³¼±
+	SoundM::annoySound();
 }
 
 void Student::render(HDC h) {
