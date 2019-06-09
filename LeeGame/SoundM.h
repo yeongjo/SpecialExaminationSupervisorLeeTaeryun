@@ -43,11 +43,21 @@ public:
 	static void stopSleep() {
 
 	}
+	// 잉잉이소리같은거
+	static void wantChangePaperSound() {
 
+	}
+	static void headDance() {
+
+	}
+	static void stopHeadDance() {
+
+	}
+	// 종이 들었다놨다
 	static void paperDrop() {
 
 	}
-
+	// 학생 드래그하는소리 들었다 내렷다
 	static void studentDrop() {
 
 	}

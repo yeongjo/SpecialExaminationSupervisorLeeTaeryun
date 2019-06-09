@@ -91,7 +91,7 @@ void Student::action() {
 
 bool Student::activeState() {
 	if (!state) return false;
-	return state->active();
+	return state->active(this);
 }
 
 void Student::angryFlipDesk() {
@@ -103,7 +103,7 @@ void Student::angryFlipDesk() {
 	GameM::getIns().increaseFlipStudent();
 	sprite->changeAnim(2);
 	isHisDeskFilped = true;
-	SoundM::flipSound();
+	SoundM::flip();
 }
 
 void Student::annoySound() {
@@ -133,7 +133,7 @@ void StudentState::action(Student *stu) {
 	myState->action(stu);
 }
 
-bool StudentState::active() {
+bool StudentState::active(Student *stu) {
 	if (isAble) return false;
 	isAble = true;
 	if (myState) delete myState;
@@ -212,11 +212,11 @@ void WantChangePaperStudentState::fixState(Student *stu) {
 
 void SleepStudentState::action(Student *stu) {
 	if (!isAble) return;
+	stu->getSprite()->changeAnim(4);
+	stu->getClassroom()->makeAngryStudentInClass(stu, amount, range);
 	if (isPlaying) return;
 	isPlaying = true;
 	SoundM::sleep();
-	stu->getSprite()->changeAnim(4);
-	stu->getClassroom()->makeAngryStudentInClass(stu, amount, range);
 }
 
 void DanceStudentState::action(Student *stu) {

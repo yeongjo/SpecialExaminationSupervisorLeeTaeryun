@@ -18,6 +18,7 @@ Desk::~Desk() {
 }
 
 inline void Desk::changeTestPaperState(int state) {
+	if (state == testPaper.state) return;
 	testPaper.state = state;
 	anim->changeAnim(state);
 	SoundM::paperDrop();

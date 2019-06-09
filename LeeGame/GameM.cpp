@@ -107,7 +107,7 @@ void GameM::update() {
 		}
 		period++;
 		roundStartDelayTimer = 0;
-		angryDelay -= 500;
+		angryDelay -= 800;
 		MTimer::changeEndTime(giveAngryTimer, angryDelay);
 		// TODO UI로 다음교시로 넘어간걸 보여줌
 		// 학생 분노수치 감소

@@ -85,6 +85,10 @@ public:
 		SoundM::studentDrop();
 	}
 	void onceUpWithOutMouseCheck();
+
+	void popMsg(int idx) {
+		UI::getIns().broadcastPopMsg(idx, p);
+	}
 	
 	Classroom *getClassroom() { return myClass; }
 	AnimSpriteByImages *getSprite() { return sprite; }
@@ -118,6 +122,8 @@ protected:
 	float range, amount;
 	// 데미지 줄때만 활성화, 해결하면 비활성화
 	bool isAble = false;
+	// 소리가 재생되는지 한번만 재생할거라서 씀
+	bool isPlaying = false;
 public:
 	// 다른사람 혹은 나에게 무슨 영향을 주는지
 	// 나의 애니메이션이 어떤거로 바뀌는지 여기서 결정
@@ -126,7 +132,7 @@ public:
 	virtual void action(Student *stu);
 
 	// 활성화 이미활성화되있으면 false 리턴
-	virtual bool active();
+	virtual bool active(Student *stu);
 
 	// 상태해결조건이 맞으면 상태해결
 	// 학생에서 클릭인지 드래그중인지 상태를 가져온다.
@@ -134,13 +140,14 @@ public:
 
 	void alwaysFixState(Student *stu){
 		isAble = false;
+		isPlaying = false;
+		stu->getSprite()->changeAnim(0);
 	}
 
 
 protected:
 	virtual void fix(Student *stu) {
-		isAble = false;
-		stu->getSprite()->changeAnim(0);
+		alwaysFixState(stu);
 	}
 };
 
@@ -153,6 +160,11 @@ protected:
 class DropPaperStudentState : public StudentState {
 public:
 	DropPaperStudentState() { range = 0; amount = 0.05f; }
+	bool active(Student *stu) {
+		SoundM::wantChangePaperSound();
+		stu->popMsg(1);
+		return StudentState::active(stu);
+	}
 	virtual void action(Student *stu);
 	virtual void fix(Student *stu) {
 		StudentState::fix(stu);
@@ -163,14 +175,22 @@ public:
 class WantChangePaperStudentState : public StudentState {
 public:
 	WantChangePaperStudentState() { range = 0; amount = 0.05f; }
+	bool active(Student *stu) {
+		SoundM::wantChangePaperSound();
+		stu->popMsg(1);
+		return StudentState::active(stu);
+	}
 	virtual void action(Student *stu);
 	virtual void fixState(Student *stu);
 };
 
 class SleepStudentState : public StudentState {
-	bool isPlaying = false;
 public:
 	SleepStudentState() { range = 300; amount = 0.05f; }
+	bool active(Student *stu) {
+		stu->popMsg(0);
+		return StudentState::active(stu);
+	}
 	virtual void action(Student *stu);
 	//void fixState(Student *stu);
 	virtual void fix(Student *stu) {
@@ -182,14 +202,22 @@ public:
 class DanceStudentState : public StudentState {
 public:
 	DanceStudentState() { range = 300; amount = 0.05f; }
+	bool active(Student *stu) {
+		SoundM::headDance();
+		return StudentState::active(stu);
+	}
 	virtual void action(Student *stu);
 	//void fixState(Student *stu);
+	virtual void fix(Student *stu) {
+		StudentState::fix(stu);
+		SoundM::stopHeadDance();
+	}
 };
 
 // 특수 상태
 class KindStudentState :public StudentState{
 	virtual void action(Student *stu) {}
-	virtual bool active() { return true; }
+	virtual bool active(Student *stu) { return true; }
 };
 
 // 컨닝하기
@@ -197,7 +225,7 @@ class SpyStudentState : public StudentState {
 	Student *targetStu;
 public:
 	SpyStudentState(Student *_targetStu) : targetStu(_targetStu){range = 0; amount = 0.1f;}
-	virtual bool active() {
+	virtual bool active(Student *stu) {
 		bool _t = isAble;
 		isAble = true;
 		return !_t;

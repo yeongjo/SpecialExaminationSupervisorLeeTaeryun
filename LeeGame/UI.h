@@ -65,10 +65,14 @@ public:
 class PopMsgBroadcastObj : public BroadcastObj {
 public:
 	static CImage *roundImg [10];
+	int _idx;
 	bool isDelete;
 
+	// 0 sleep
+	// 1 paperplz
 	PopMsgBroadcastObj(int idx, Pos<float>& _p) {
 		if (roundImg[idx]) return;
+		_idx = idx;
 		_alpha = 255;
 		roundImg[idx] = new CImage();
 		wstringstream ss;
@@ -78,5 +82,8 @@ public:
 	void tick() {
 		if(isDelete)
 		BroadcastObj::tick();
+	}
+	void render(HDC h) {
+		roundImg[_idx]->AlphaBlend(h, p.x, p.y, alpha, AC_SRC_OVER);
 	}
 };
