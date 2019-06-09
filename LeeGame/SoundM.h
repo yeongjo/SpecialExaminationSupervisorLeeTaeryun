@@ -30,13 +30,13 @@ public:
 	static void annoySound() {
 		//FMOD_DEFAULT
 		//FMOD_LOOP_NORMAL
-		sterma(sound[0], "sound/책상엎고 나가기.mp3", false);
+		sterma(sound[0], "sound/코고는 효과음.wav", true);
 	}
 	static void destroySound() {
 
 	}
-	static void flip() {
-		sterma(sound[0], "sound/책상엎고 나가기.mp3", false);
+	static void flipSound() {
+		sterma(sound[1], "sound/책상엎고 나가기.mp3", false);
 	}
 
 private:
@@ -56,7 +56,7 @@ private:
 		if(channel)
 			FMOD_Channel_Stop(channel);
 		FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, *sound, 0, &channel);
-		FMOD_Channel_SetVolume(channel, .01f);
+		FMOD_Channel_SetVolume(channel, .05f);
 		//FMOD_Sound_Release(*sound);
 	}
 };
