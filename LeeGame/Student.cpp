@@ -85,7 +85,8 @@ void Student::tick() {
 
 void Student::action() {
 	if (!state) return;
-	state->action(this);
+	state->action(this);	
+//	SoundM::flipSound();
 }
 
 bool Student::activeState() {
@@ -102,7 +103,7 @@ void Student::angryFlipDesk() {
 	GameM::getIns().increaseFlipStudent();
 	sprite->changeAnim(2);
 	isHisDeskFilped = true;
-	SoundM::flip();
+	SoundM::flipSound();
 }
 
 void Student::annoySound() {
