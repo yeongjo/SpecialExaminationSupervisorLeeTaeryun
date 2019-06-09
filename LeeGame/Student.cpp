@@ -40,7 +40,7 @@ void Student::angryFlipDesk() {
 }
 
 void Student::annoySound() {
-	// °í¹ÎÇÏ´Â ¼Ò¸® , ¸¸¤©Ç³¼±
+	// °í¹ÎÇÏ´Â ¼Ò¸® , ¸»Ç³¼±
 }
 
 void Student::render(HDC h) {
