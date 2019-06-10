@@ -26,7 +26,7 @@ class GameM : public Singleton<GameM>{
 	vector<CImage *>roundImgs;
 	int roundTimer;
 
-	int angryDelay = 3000;
+	int angryDelay;
 
 	// 0 : 플레이중
 	// 1 : 죽음

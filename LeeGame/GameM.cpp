@@ -53,8 +53,10 @@ void GameM::init() {
 	broadcastRound(1);
 
 	
+	angryDelay = 3000;
 	if (MTimer::isHere(giveAngryTimer)) {
 		MTimer::reset(giveAngryTimer);
+		MTimer::changeEndTime(giveAngryTimer, angryDelay);
 	} else {
 		giveAngryTimer = MTimer::create(angryDelay, true, false);
 	}
@@ -97,7 +99,7 @@ void GameM::update() {
 	// 60sec : 1sec / 60
 	//time = 1 + passClock * 0.001f / 60.f;
 	// -----------------시간바꾸는곳-------------------------------
-	time = 1 + passClock * 0.001f / 0.3f;
+	time = 1 + passClock * 0.001f / 20.f;
 	// ------------------------------------------------------------------------------
 
 
@@ -156,6 +158,7 @@ void GameM::giveWithDelayAngry() {
 		for (size_t i = 0; i < _stuSize; i++) {
 			auto _stu = classrooms [rndClass].getStudent(rndStudent[i]);
 			if (_stu != nullptr && _stu->activeState()) {
+				DBOUT(_stu << L"activeState\n");
 				break;
 			}
 		}

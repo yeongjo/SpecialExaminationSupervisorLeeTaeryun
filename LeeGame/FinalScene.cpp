@@ -7,6 +7,7 @@ FinalScene::~FinalScene() {
 }
 
 void FinalScene::tick() {
+
 }
 
 void FinalScene::render(HDC h) {
