@@ -4,7 +4,7 @@
 BLENDFUNCTION AnimSpriteByImages::blend = {AC_SRC_OVER, 0,255,AC_SRC_ALPHA};
 
 void AnimSpriteByImages::init(vector<vector<wstring>> &imgNames) {
-	imgs.resize(imgNames.size());
+		imgs.resize(imgNames.size());
 	for (size_t i = 0; i < imgNames.size(); i++) {
 		for (size_t j = 0; j < imgNames[i].size(); j++) {
 			auto t_image = new CImage();

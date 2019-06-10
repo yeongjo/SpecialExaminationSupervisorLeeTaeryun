@@ -1,11 +1,11 @@
 #pragma once
 #include <fmod.h>
 
-class SoundM{
+class SoundM {
 public:
-		static FMOD_SYSTEM *g_System;  // FMOD system 변수 선언
+	static FMOD_SYSTEM *g_System;  // FMOD system 변수 선언
 
-		static FMOD_SOUND **(sound[20]);
+	static FMOD_SOUND **(sound [20]);
 
 
 	static void init() {
@@ -13,10 +13,9 @@ public:
 		FMOD_System_Create(&g_System); // FMOD system 객체 생성
 		FMOD_System_Init(g_System, 32, FMOD_INIT_NORMAL, NULL); // FMOD system 초기화
 
-		for (size_t i = 0; i < 20; i++)
-		{
-			sound[i] = new FMOD_SOUND*;
-			*sound[i] = nullptr;
+		for (size_t i = 0; i < 20; i++) {
+			sound [i] = new FMOD_SOUND *;
+			*sound [i] = nullptr;
 		}
 	}
 	static void Release() {
@@ -25,68 +24,84 @@ public:
 		FMOD_System_Release(g_System); // FMOD system 객체 해제
 	}
 	static void update() {
-		FMOD_System_Update( g_System );
+		FMOD_System_Update(g_System);
 	}
+
+	static void reset() {
+		headDanceCount = sleepCount = 1;
+		stopSleep();
+		stopHeadDance();
+	}
+
 	static void annoySound() {
 		//FMOD_DEFAULT
 		//FMOD_LOOP_NORMAL
 		//sterma(sound[0], "sound/코고는 효과음.wav", true, .05f);
 	}
 	static void flip() {
-		sterma(sound[0], "sound/책상엎고 나가기.mp3", false, .1f);
+		static FMOD_CHANNEL *channel;
+		sterma(sound [5], channel, "sound/책상엎고 나가기.mp3", false, .1f);
 	}
 
 	static void pop() {
-		//sterma(sound[0], "sound/말풍선.mp3", false, 1.f);
+		static FMOD_CHANNEL *channel;
+		sterma(sound[0],channel, "sound/말풍선.mp3", false, .4f);
 	}
 
-	static FMOD_CHANNEL* sleepChannel;
+	static FMOD_CHANNEL *sleepChannel;
 	static int sleepCount;
 	static void sleep() {
 		sleepCount++;
-		sleepChannel = sterma(sound[1], "sound/코고는 효과음.wav", true, .1f);
+		sterma(sound [1], sleepChannel, "sound/코고는 효과음.wav", true, .1f);
 	}
 	static void stopSleep() {
 		sleepCount--;
-		if(sleepCount == 0)
+		if (sleepCount == 0)
 			FMOD_Channel_Stop(sleepChannel);
 	}
 
 	static void TikTop() {
-		sterma(sound[2], "sound/시계초침.wav", true, .1f);
+		static FMOD_CHANNEL *channel;
+		sterma(sound [2], channel, "sound/시계초침.wav", true, .1f);
 	}
 
-	
+
 	static void guyGetoutSound() {
 
 	}
+
 	// 잉잉이소리같은거
 	static void wantChangePaperSound() {
-		sterma(sound[3], "sound/ahh sound effec.mp3", false, 0.1f);
+		static FMOD_CHANNEL *channel;
+		sterma(sound [3], channel, "sound/Duck Toy Long.mp3", false, 0.1f);
 	}
 
-	static FMOD_CHANNEL* headDanceChannel;
+	static FMOD_CHANNEL *headDanceChannel;
 	static int headDanceCount;
 	static void headDance() {
-
+		headDanceCount++;
+		sterma(sound [4], headDanceChannel, "sound/.mp3", false, 0.1f)
 	}
 	static void stopHeadDance() {
-
+		headDanceCount--;
+		if (headDanceCount == 0)
+			FMOD_Channel_Stop(headDanceChannel);
 	}
+
 	// 종이 들었다놨다
 	static void paperDrop() {
 
 	}
 	// 학생 드래그하는소리 들었다 내렷다
 	static void studentDrop() {
-
+		static FMOD_CHANNEL *channel;
+		sterma(sound [6], channel, "sound/Duck Toy.mp3", false, 0.1f);
 	}
 
 private:
-	static FMOD_CHANNEL* sterma(FMOD_SOUND** sound, const char* ch, bool isLoop, float volume) {
-		
+	static FMOD_CHANNEL *sterma(FMOD_SOUND **sound, FMOD_CHANNEL *&channel, const char *ch, bool isLoop, float volume) {
+
 		UINT mode = isLoop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT;
-		static FMOD_CHANNEL* channel;
 		if (!*sound) {
 			FMOD_System_CreateSound(
 				g_System,
@@ -96,7 +111,7 @@ private:
 				sound
 			);
 		}
-		if(channel)
+		if (channel)
 			FMOD_Channel_Stop(channel);
 		FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, *sound, 0, &channel);
 		FMOD_Channel_SetVolume(channel, volume);

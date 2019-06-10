@@ -6,7 +6,7 @@ using namespace std;
 constexpr int classroomX = 464*2;
 constexpr int classroomY = 426*2;
 
-class TestPaper;
+class TestPaper; class DanceGuy;
 
 // ±³½Ç
 
@@ -33,6 +33,7 @@ class Classroom : public Obj{
 	bool isInit = false;
 public:
 	TestPaper *paper = nullptr;
+	DanceGuy *danceGuy = nullptr;
 	
 	Classroom();
 	~Classroom();
@@ -54,6 +55,10 @@ public:
 	void removeStudent(Student *stu);
 
 	void changeOffX(float _x);
+
+	bool startDance();
+
+	void giveDanceDamage();
 
 	void tick();
 
@@ -103,7 +108,7 @@ public:
 		SoundM::paperDrop();
 	}
 	Guy::onceUpWithOutMouseCheck();
-	}
+	} 
 
 	bool isDestroyZone() { return false; }
 };

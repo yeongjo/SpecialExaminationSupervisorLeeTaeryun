@@ -110,7 +110,7 @@ void GameM::update() {
 	// 60sec : 1sec / 60
 	//time = 1 + passClock * 0.001f / 60.f;
 	// -----------------시간바꾸는곳-------------------------------
-	time = 1 + passClock * 0.001f / .3f;
+	time = 1 + passClock * 0.001f / 20.f;
 	// ------------------------------------------------------------------------------
 
 
@@ -126,9 +126,9 @@ void GameM::update() {
 			SceneM::changeScene(1);
 			return;
 		}
+		angryDelay -= 1300/period;
 		period++;
 		roundStartDelayTimer = 0;
-		angryDelay -= 800;
 		MTimer::changeEndTime(giveAngryTimer, angryDelay);
 		// TODO UI로 다음교시로 넘어간걸 보여줌
 		// 학생 분노수치 감소
@@ -159,7 +159,14 @@ void GameM::nextPeriodEffect() {
 void GameM::giveWithDelayAngry() {
 	if (roundStartDelayTimer > 3000)
 	if (MTimer::isEnd(giveAngryTimer)) {
+
+		float _rndDance = random();
 		int rndClass = random(3);
+		if(period >= 3 && _rndDance < .08f){
+			classrooms [rndClass].startDance();
+			return;
+		}
+
 		int _stuSize = classrooms [rndClass].getStudentSize();
 		vector<int> rndStudent = unDuplicateRandom(_stuSize, _stuSize);
 #ifdef TEST
@@ -176,6 +183,7 @@ void GameM::giveWithDelayAngry() {
 		}
 
 		for (size_t i = 0; i < classrooms.size(); i++) {
+			classrooms [i].giveDanceDamage();
 		for (size_t j = 0; j < classrooms[i].getStudentSize(); j++) {
 			auto _stu = classrooms [i].getStudent(j);
 			_stu->action();

@@ -1,5 +1,6 @@
 #include "Classroom.h"
 #include "ClockObj.h"
+#include "DanceGuy.h"
 
 CImage *Classroom::img = nullptr;
 ClockObj *clockObj = nullptr;
@@ -31,7 +32,11 @@ void Classroom::init(int idx) {
 			ss << L"img/"<< i+1 << L" Class.png";
 			numImg [i]->Load(ss.str().c_str());
 		}
+		
 	}
+	if(!danceGuy)
+		danceGuy = new DanceGuy();
+	danceGuy->isAble = false;
 	classIdx = idx;
 	size.set(classroomX, classroomY);
 	p.set((idx-1) * size.x, 0);
@@ -118,6 +123,15 @@ void Classroom::changeOffX(float _x) {
 		desks [i]->off.x = off.x;
 	}
 	paper->off.x = off.x;
+	danceGuy->off.x = off.x;
+}
+
+inline bool Classroom::startDance() {
+	return danceGuy->startDance(this);
+}
+
+inline void Classroom::giveDanceDamage() {
+	danceGuy->giveDamage(this);
 }
 
 void Classroom::tick() {

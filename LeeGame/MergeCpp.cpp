@@ -11,6 +11,7 @@
 #include "Guy.cpp"
 #include "KeyM.cpp"
 #include "Student.cpp"
+#include "DanceGuy.cpp"
 #include "UI.cpp"
 #include "SoundM.cpp"
 #include "FinalScene.cpp"
