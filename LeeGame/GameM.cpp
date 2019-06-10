@@ -164,7 +164,7 @@ void GameM::giveWithDelayAngry() {
 
 		float _rndDance = random();
 		int rndClass = random(3);
-		if(period >= 1 && _rndDance < .99f){
+		if(period >= 3 && _rndDance < .08f){
 			classrooms [rndClass].startDance();
 		} else {
 
