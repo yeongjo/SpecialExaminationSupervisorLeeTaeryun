@@ -3,13 +3,13 @@
 
 BLENDFUNCTION AnimSpriteByImages::blend = {AC_SRC_OVER, 0,255,AC_SRC_ALPHA};
 
-void AnimSpriteByImages::init(vector<vector<wstring>> &imgNames) {
+void AnimSpriteByImages::init(vector<vector<wstring>> &imgNames, int delay) {
 		imgs.resize(imgNames.size());
 	for (size_t i = 0; i < imgNames.size(); i++) {
 		for (size_t j = 0; j < imgNames[i].size(); j++) {
 			auto t_image = new CImage();
 			assert(!FAILED(t_image->Load(imgNames [i][j].c_str())));
-			auto t = new FrameBlock(t_image, 100);
+			auto t = new FrameBlock(t_image, delay);
 			imgs[i].push_back(t);
 		}
 	}

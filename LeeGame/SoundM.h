@@ -38,6 +38,22 @@ public:
 		//FMOD_LOOP_NORMAL
 		//sterma(sound[0], "sound/코고는 효과음.wav", true, .05f);
 	}
+
+
+	static FMOD_CHANNEL *danceChannel;
+	static int danceCount;
+	static void dance() {
+		danceCount++;
+		if(danceCount == 1)
+		sterma(sound [7], danceChannel, "sound/dance.mp3", false, .13f);
+	}
+	static void stopDance() {
+		danceCount--;
+		if (danceCount == 0)
+			FMOD_Channel_Stop(danceChannel);
+	}
+
+
 	static void flip() {
 		static FMOD_CHANNEL *channel;
 		sterma(sound [5], channel, "sound/책상엎고 나가기.mp3", false, .1f);
@@ -63,6 +79,8 @@ public:
 	static void TikTop() {
 		static FMOD_CHANNEL *channel;
 		sterma(sound [2], channel, "sound/시계초침.wav", true, .1f);
+		static FMOD_CHANNEL *channel2;
+		sterma(sound [8], channel, "sound/BGM.mp3", true, .05f);
 	}
 
 
@@ -80,7 +98,7 @@ public:
 	static int headDanceCount;
 	static void headDance() {
 		headDanceCount++;
-		sterma(sound [4], headDanceChannel, "sound/.mp3", false, 0.1f)
+		sterma(sound [4], headDanceChannel, "sound/Duck Toy Long.mp3", false, 0.1f);
 	}
 	static void stopHeadDance() {
 		headDanceCount--;

@@ -6,3 +6,5 @@ FMOD_CHANNEL* SoundM::sleepChannel = nullptr;
 int SoundM::sleepCount = 0;
 FMOD_CHANNEL* SoundM::headDanceChannel = nullptr;
 int SoundM::headDanceCount = 0;
+FMOD_CHANNEL *SoundM::danceChannel = nullptr;
+int SoundM::danceCount = 0;

@@ -126,7 +126,7 @@ void GameM::update() {
 			SceneM::changeScene(1);
 			return;
 		}
-		angryDelay -= 1300/period;
+		angryDelay -= 1200/period;
 		period++;
 		roundStartDelayTimer = 0;
 		MTimer::changeEndTime(giveAngryTimer, angryDelay);
@@ -150,7 +150,7 @@ void GameM::nextPeriodEffect() {
 	for (size_t i = 0; i < classrooms.size(); i++) {
 		for (size_t j = 0; j < classrooms[i].getStudentSize(); j++) {
 			auto _t = classrooms [i].getStudent(j);
-			_t->takeAngryDamage(-.1f);
+			_t->takeAngryDamage(-.2f);
 			_t->resetState();
 		}
 	}
@@ -160,35 +160,37 @@ void GameM::giveWithDelayAngry() {
 	if (roundStartDelayTimer > 3000)
 	if (MTimer::isEnd(giveAngryTimer)) {
 
+		
+
 		float _rndDance = random();
 		int rndClass = random(3);
 		if(period >= 3 && _rndDance < .08f){
 			classrooms [rndClass].startDance();
-			return;
-		}
+		} else {
 
-		int _stuSize = classrooms [rndClass].getStudentSize();
-		vector<int> rndStudent = unDuplicateRandom(_stuSize, _stuSize);
+			int _stuSize = classrooms [rndClass].getStudentSize();
+			vector<int> rndStudent = unDuplicateRandom(_stuSize, _stuSize);
 #ifdef TEST
-		rndClass = 1;
-		_stuSize = classrooms [rndClass].getStudentSize();
-		rndStudent = unDuplicateRandom(_stuSize, _stuSize);
+			rndClass = 1;
+			_stuSize = classrooms [rndClass].getStudentSize();
+			rndStudent = unDuplicateRandom(_stuSize, _stuSize);
 #endif
-		for (size_t i = 0; i < _stuSize; i++) {
-			auto _stu = classrooms [rndClass].getStudent(rndStudent[i]);
-			if (_stu != nullptr && _stu->activeState()) {
-				DBOUT(_stu << L"activeState\n");
-				break;
+			for (size_t i = 0; i < _stuSize; i++) {
+				auto _stu = classrooms [rndClass].getStudent(rndStudent [i]);
+				if (_stu != nullptr && _stu->activeState()) {
+					DBOUT(_stu << L"activeState\n");
+					break;
+				}
 			}
 		}
 
 		for (size_t i = 0; i < classrooms.size(); i++) {
 			classrooms [i].giveDanceDamage();
-		for (size_t j = 0; j < classrooms[i].getStudentSize(); j++) {
-			auto _stu = classrooms [i].getStudent(j);
-			_stu->action();
+			for (size_t j = 0; j < classrooms [i].getStudentSize(); j++) {
+				auto _stu = classrooms [i].getStudent(j);
+				_stu->action();
+			}
 		}
-	}
 	}
 	
 }

@@ -24,7 +24,7 @@ inline void DanceGuy::loadImg() {
 		ss.str(L"");
 		//ss.clear();
 	}
-	preLoadSprite->init(s);
+	preLoadSprite->init(s, 37);
 }
 
 inline void DanceGuy::tick() {
@@ -35,6 +35,7 @@ inline void DanceGuy::tick() {
 inline bool DanceGuy::startDance(Classroom *_class) {
 	m_class = _class;
 	p.set(90*2+_class->p.x, 300*2+_class->p.y);
+	SoundM::dance();
 	return isAble = true;
 }
 

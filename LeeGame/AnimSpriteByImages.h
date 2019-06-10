@@ -35,7 +35,7 @@ class AnimSpriteByImages :
 
 	static BLENDFUNCTION blend;
 public:
-	void init(vector<vector<wstring>> &imgNames);
+	void init(vector<vector<wstring>> &imgNames, int delay = 100);
 	// 시간이 지나면 자동으로 다음애니메이션으로
 	virtual void tick(int deltaTime);
 	virtual void changeAnim(UINT i);
