@@ -64,6 +64,9 @@ public:
 	static void wantChangePaperSound() {
 		sterma(sound[3], "sound/ahh sound effec.mp3", false, 0.1f);
 	}
+
+	static FMOD_CHANNEL* headDanceChannel;
+	static int headDanceCount;
 	static void headDance() {
 
 	}
