@@ -8,6 +8,8 @@ Student::Student() : Guy() {
 
 Student::~Student() {
 	myClass->removeStudent(this);
+	if (spy)
+		spy->targetStu = nullptr;
 	if (popMsgObj)
 		delete popMsgObj;
 }
@@ -76,6 +78,7 @@ void Student::onceUpWithOutMouseCheck() {
 
 inline void Student::popMsg(int idx) {
 	popMsgObj = UI::getIns().broadcastPopMsg(idx, p, this);
+	SoundM::pop();
 }
 
 void Student::tick() {
@@ -88,7 +91,6 @@ void Student::tick() {
 			delete this;
 		}
 	}
-	
 }
 
 void Student::action() {
@@ -137,6 +139,7 @@ bool Student::isDestroyZone() {
 }
 
 void Student::removePopMsg() {
+	if(popMsgObj)
 	popMsgObj->isDelete = true;
 }
 
@@ -146,18 +149,21 @@ void StudentState::action(Student *stu) {
 }
 
 bool StudentState::active(Student *stu) {
-	if (isAble) return false;
-	isAble = true;
+	if (myState) {
+		if (myState->isAble) return false;
+		myState->isAble = true;
+	}
 	if (myState) delete myState;
 	myState = StudentStateMaker::makeNewState();
 	myState->isAble = true;
 	myState->_active(stu);
 	return true;
-}
+ }
 
 void SpyStudentState::action(Student *stu) {
 	if (!isAble) return;
 	stu->getSprite()->changeAnim(5);
+	if(targetStu)
 	targetStu->takeAngryDamage(amount);
 }
 
@@ -172,6 +178,7 @@ void DropPaperStudentState::action(Student *stu) {
 void StudentState::fixState(Student *stu) {
 	if (myState) {
 		myState->fixState(stu);
+		
 	}else if (stu->getIsMouseDown()) {
 		fix(stu);
 	}
@@ -212,6 +219,7 @@ void WantChangePaperStudentState::action(Student *stu) {
 	if (!isAble) return;
 	stu->getSprite()->changeAnim(6);
 	stu->takeAngryDamage(amount);
+	SoundM::wantChangePaperSound();
 }
 
 void WantChangePaperStudentState::fixState(Student *stu) {

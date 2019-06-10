@@ -1,7 +1,7 @@
 #pragma once
 #include "AnimSpriteByImages.h"
 
-class StudentState; class Classroom; class PopMsgBroadcastObj;
+class StudentState; class Classroom; class PopMsgBroadcastObj; class SpyStudentState;
 
 // Classroom, GameM에서 vector로 가지고있음
 
@@ -29,6 +29,7 @@ private:
 
 	StudentState *state = nullptr;
 
+
 	//	[송영조] [18:11] int로 1부터 100까지 범위하면
 	//	[송영조] [18:11] 제일 작은게 1로 증가시키는거라 애매하니까
 	//	[송영조] [18:12] 그냥 float [0 ~ 1] 까지로 해둠 엔간한거
@@ -41,6 +42,7 @@ private:
 	int flipRemoveTimer = 1000;
 
 public:
+	SpyStudentState* spy = nullptr;
 	// 위치 참조할때도 필요
 	Desk *sitDesk; // 엎어버릴때 필요
 	PopMsgBroadcastObj *popMsgObj = nullptr;
@@ -146,6 +148,10 @@ public:
 	void alwaysFixState(Student *stu){
 		isAble = false;
 		isPlaying = false;
+		if (myState) {
+			myState->isAble = false;
+			myState->isPlaying = false;
+		}
 		stu->getSprite()->changeAnim(0);
 	}
 
@@ -228,18 +234,21 @@ public:
 // 특수 상태
 class KindStudentState :public StudentState{
 	virtual void action(Student *stu) {}
-	virtual bool active(Student *stu) { return true; }
+	virtual bool active(Student *stu) { return false; }
 };
 
 // 컨닝하기
 class SpyStudentState : public StudentState {
-	Student *targetStu;
 public:
-	SpyStudentState(Student *_targetStu) : targetStu(_targetStu){range = 0; amount = 0.1f;}
+	Student* targetStu = nullptr;
+	SpyStudentState(Student *_targetStu) : targetStu(_targetStu){
+		range = 0; amount = 0.1f;
+		targetStu->spy = this;
+	}
 	virtual bool active(Student *stu) {
 		bool _t = isAble;
 		isAble = true;
-		return !_t;
+		return false;
 	}
 	virtual void action(Student *stu);
 };
