@@ -43,6 +43,9 @@ public:
 	static void stopSleep() {
 
 	}
+	static void guyGetoutSound() {
+
+	}
 	// À×À×ÀÌ¼Ò¸®°°Àº°Å
 	static void wantChangePaperSound() {
 

@@ -42,7 +42,8 @@ inline void Guy::onceUpWithOutMouseCheck() {
 	isMouseStay = false;
 	if (isDraging) { // 드래그 놓음
 		if (isDestroyZone()) {
-			SoundM::destroySound();
+			GameM::getIns().increaseFlipStudent();
+			SoundM::guyGetoutSound();
 			delete this;
 			return;
 		}

@@ -13,3 +13,4 @@
 #include "Student.cpp"
 #include "UI.cpp"
 #include "SoundM.cpp"
+#include "FinalScene.cpp"

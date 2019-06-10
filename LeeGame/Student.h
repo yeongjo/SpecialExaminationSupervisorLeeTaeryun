@@ -1,7 +1,7 @@
 #pragma once
 #include "AnimSpriteByImages.h"
 
-class StudentState; class Classroom;
+class StudentState; class Classroom; class PopMsgBroadcastObj;
 
 // Classroom, GameM에서 vector로 가지고있음
 
@@ -43,6 +43,7 @@ private:
 public:
 	// 위치 참조할때도 필요
 	Desk *sitDesk; // 엎어버릴때 필요
+	PopMsgBroadcastObj *popMsgObj = nullptr;
 
 	Student();
 	~Student();
@@ -80,18 +81,20 @@ public:
 
 	bool isDestroyZone();
 
+	void removePopMsg();
+
 	void onceDown() {
 		Guy::onceDown();
 		SoundM::studentDrop();
 	}
 	void onceUpWithOutMouseCheck();
 
-	void popMsg(int idx) {
-		UI::getIns().broadcastPopMsg(idx, p);
-	}
+	void popMsg(int idx);
 	
 	Classroom *getClassroom() { return myClass; }
 	AnimSpriteByImages *getSprite() { return sprite; }
+
+	float getAngryAmount() { return angryAmount; }
 
 	enum class Type {
 		normal, //  ㅄ
@@ -134,6 +137,8 @@ public:
 	// 활성화 이미활성화되있으면 false 리턴
 	virtual bool active(Student *stu);
 
+	virtual bool _active(Student *stu) { return true; }
+
 	// 상태해결조건이 맞으면 상태해결
 	// 학생에서 클릭인지 드래그중인지 상태를 가져온다.
 	virtual void fixState(Student *stu);
@@ -160,51 +165,57 @@ protected:
 class DropPaperStudentState : public StudentState {
 public:
 	DropPaperStudentState() { range = 0; amount = 0.05f; }
-	bool active(Student *stu) {
+	bool _active(Student *stu) {
 		SoundM::wantChangePaperSound();
 		stu->popMsg(1);
-		return StudentState::active(stu);
+		return true;
 	}
 	virtual void action(Student *stu);
 	virtual void fix(Student *stu) {
 		StudentState::fix(stu);
 		stu->sitDesk->changeTestPaperState(0);
+		stu->removePopMsg();
 	}
 };
 
 class WantChangePaperStudentState : public StudentState {
 public:
 	WantChangePaperStudentState() { range = 0; amount = 0.05f; }
-	bool active(Student *stu) {
+	bool _active(Student *stu) {
 		SoundM::wantChangePaperSound();
 		stu->popMsg(1);
-		return StudentState::active(stu);
+		return true;
 	}
 	virtual void action(Student *stu);
 	virtual void fixState(Student *stu);
+	virtual void fix(Student *stu) {
+		StudentState::fix(stu);
+		stu->removePopMsg();
+	}
 };
 
 class SleepStudentState : public StudentState {
 public:
-	SleepStudentState() { range = 300; amount = 0.05f; }
-	bool active(Student *stu) {
+	SleepStudentState() { range = 300; amount = 0.02f; }
+	bool _active(Student *stu) {
 		stu->popMsg(0);
-		return StudentState::active(stu);
+		return true;
 	}
 	virtual void action(Student *stu);
 	//void fixState(Student *stu);
 	virtual void fix(Student *stu) {
 		StudentState::fix(stu);
 		SoundM::stopSleep();
+		stu->removePopMsg();
 	}
 };
 
 class DanceStudentState : public StudentState {
 public:
-	DanceStudentState() { range = 300; amount = 0.05f; }
-	bool active(Student *stu) {
+	DanceStudentState() { range = 300; amount = 0.02f; }
+	bool _active(Student *stu) {
 		SoundM::headDance();
-		return StudentState::active(stu);
+		return true;
 	}
 	virtual void action(Student *stu);
 	//void fixState(Student *stu);

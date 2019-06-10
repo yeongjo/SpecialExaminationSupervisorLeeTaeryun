@@ -250,7 +250,7 @@ inline void SceneM::addObj(Manager *obj, size_t layer) {
 }
 
 inline SceneM &SceneM::getIns(size_t i) {
-	if (i == 0) {
+	if (self.size() == 0 && i == 0) {
 		self.resize(1);
 	}
 	if (i < 0 || i >= self.size()) assert("SceneM 에 있지도 않은 인덱스를 참조함" == 0);

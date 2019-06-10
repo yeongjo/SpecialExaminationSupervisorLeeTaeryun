@@ -8,13 +8,15 @@ Student::Student() : Guy() {
 
 Student::~Student() {
 	myClass->removeStudent(this);
+	if (popMsgObj)
+		delete popMsgObj;
 }
 
 void Student::loadImages() {
 	wstring t_names[] = {L"black", L"blue", L"red", L"yel"};
 	for (size_t i = 0; i < 4; i++) {
 		wstringstream ss;
-		vector<vector<wstring>> s(6);
+		vector<vector<wstring>> s(7);
 		ss << L"img/stu_" << t_names [i] << L"_flip_0000.png";
 		s [0].push_back(ss.str());ss.str(L"");
 		ss << L"img/stu_" << t_names [i] << L"_angry.png";
@@ -29,6 +31,8 @@ void Student::loadImages() {
 		s[4].push_back(ss.str());ss.str(L"");
 		ss << L"img/stu_" << t_names [i] << L"_flip_0001.png";
 		s[5].push_back(ss.str());ss.str(L"");
+		ss << L"img/stu_" << t_names [i] << L"_wantchange.png";
+		s[6].push_back(ss.str());ss.str(L"");
 		preloadSprite [i] = new AnimSpriteByImages();
 		preloadSprite [i]->init(s);
 	}
@@ -68,6 +72,10 @@ void Student::onceUpWithOutMouseCheck() {
 		SoundM::studentDrop();
 	}
 	Guy::onceUpWithOutMouseCheck();
+}
+
+inline void Student::popMsg(int idx) {
+	popMsgObj = UI::getIns().broadcastPopMsg(idx, p, this);
 }
 
 void Student::tick() {
@@ -123,9 +131,13 @@ void Student::render(HDC h) {
 
 bool Student::isDestroyZone() {
 	auto _class = getClassroom();
-	RECT rt = {_class->p.x, _class->p.y, _class->p.x+_class->size.x * .12f, _class->p.y+_class->size.y};
+	RECT rt = {_class->p.x- 100, _class->p.y, _class->p.x+_class->size.x * .12f, _class->p.y+_class->size.y};
 	return collPointRect(p.x, p.y, &rt);
 	//return false;
+}
+
+void Student::removePopMsg() {
+	popMsgObj->isDelete = true;
 }
 
 void StudentState::action(Student *stu) {
@@ -139,6 +151,7 @@ bool StudentState::active(Student *stu) {
 	if (myState) delete myState;
 	myState = StudentStateMaker::makeNewState();
 	myState->isAble = true;
+	myState->_active(stu);
 	return true;
 }
 
@@ -197,7 +210,7 @@ AnimSpriteByImages *Student::preloadSprite [4] = {0};
 
 void WantChangePaperStudentState::action(Student *stu) {
 	if (!isAble) return;
-	stu->getSprite()->changeAnim(1);
+	stu->getSprite()->changeAnim(6);
 	stu->takeAngryDamage(amount);
 }
 

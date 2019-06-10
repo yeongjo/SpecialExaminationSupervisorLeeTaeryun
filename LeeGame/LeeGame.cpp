@@ -6,6 +6,7 @@
 #include "framework.h"
 #include "LeeGame.h"
 #include "UI.h"
+#include "FinalScene.h"
 #include "MergeCpp.cpp"
 
 #define MAX_LOADSTRING 100
@@ -120,7 +121,7 @@ Pos<> dbStartPos = Pos<>(dbStartPosX,dbStartPosY);
 
 void makeFinalScene() {
 	SceneM::changeScene(1);
-
+	new FinalScene();
 	SceneM::changeScene(0);
 }
 

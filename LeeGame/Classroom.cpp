@@ -24,8 +24,15 @@ void Classroom::init(int idx) {
 		img = new CImage();
 		assert(!FAILED(img->Load(L"img/class.jpg")));
 		Student::loadImages();
-	}
 
+		for (size_t i = 0; i < 3; i++) {
+			numImg [i] = new CImage();
+			wstringstream ss;
+			ss << L"img/"<< i+1 << L" Class.png";
+			numImg [i]->Load(ss.str().c_str());
+		}
+	}
+	classIdx = idx;
 	size.set(classroomX, classroomY);
 	p.set((idx-1) * size.x, 0);
 
@@ -117,9 +124,12 @@ void Classroom::tick() {
 
 void Classroom::render(HDC h) {
 	img->StretchBlt(h, p.x+off.x, p.y+off.y, size.x, size.y, SRCCOPY);
+	numImg [classIdx]->Draw(h, p.x+off.x, p.y+off.y);
 	clockObj->render(h, p.x+off.x, p.y+off.y); 
 }
 
 size_t Classroom::getStudentSize() {
 	return students.size();
 }
+
+CImage *Classroom::numImg[3];

@@ -13,8 +13,8 @@ public:
 
 	void broadcastRound(int round);
 
-	void broadcastGameover();
-	PopMsgBroadcastObj *broadcastPopMsg(int idx, Pos<float>& _p);
+	GameoverBroadcastObj *broadcastGameover();
+	PopMsgBroadcastObj *broadcastPopMsg(int idx, Pos<float>& _p, Student *stu);
 };
 
 class BroadcastObj : public Obj {
@@ -27,7 +27,7 @@ public:
 	}
 	void tick() {
 		alpha = _alpha > 255 ? 255 : _alpha;
-		_alpha--;
+		_alpha-=deltatime;
 		if (alpha < 0) delete this;
 	}
 	virtual void render(HDC h) {
@@ -55,35 +55,47 @@ public:
 };
 class GameoverBroadcastObj : public BroadcastObj {
 public:
+	bool isDelete =false;
 	GameoverBroadcastObj() {
 		if (img) return;
 		img = new CImage();
-		img->Load(L"gameover.jpg");
-	}
-};
-
-class PopMsgBroadcastObj : public BroadcastObj {
-public:
-	static CImage *roundImg [10];
-	int _idx;
-	bool isDelete;
-
-	// 0 sleep
-	// 1 paperplz
-	PopMsgBroadcastObj(int idx, Pos<float>& _p) {
-		if (roundImg[idx]) return;
-		_idx = idx;
-		_alpha = 255;
-		roundImg[idx] = new CImage();
-		wstringstream ss;
-		ss << L"round" << idx << L".png";
-		roundImg[idx]->Load(ss.str().c_str());
+		img->Load(L"img/게임오버.png");
 	}
 	void tick() {
 		if(isDelete)
 		BroadcastObj::tick();
 	}
+};
+
+class PopMsgBroadcastObj : public GameoverBroadcastObj {
+public:
+	static CImage *roundImg [10];
+	int _idx;
+	Student *_stu;
+	// 0 sleep
+	// 1 paperplz
+	PopMsgBroadcastObj(int idx, Pos<float>& _p, Student *stu) {
+		GameM::getIns().everyPopmsgForInitClear.push_back(this);
+		p = _p;
+		_stu = stu;
+		p += Pos<float>(30, 0);
+		_idx = idx;
+		_alpha = 255;
+		if (!roundImg [idx]) {
+			roundImg [idx] = new CImage();
+			wstringstream ss;
+			ss << L"img/popmsg" << idx << L".png";
+			roundImg [idx]->Load(ss.str().c_str());
+		}
+		p.y -= roundImg [idx]->GetHeight();
+		off.x = GameM::getIns().getClassroom(0)->off.x;
+	}
+	~PopMsgBroadcastObj();
+	void tick() {
+		off.x = GameM::getIns().getClassroom(0)->off.x;
+		GameoverBroadcastObj::tick();
+	}
 	void render(HDC h) {
-		roundImg[_idx]->AlphaBlend(h, p.x, p.y, alpha, AC_SRC_OVER);
+		roundImg[_idx]->AlphaBlend(h, p.x + off.x, p.y+ off.y, alpha, AC_SRC_OVER);
 	}
 };

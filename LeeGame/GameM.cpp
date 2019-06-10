@@ -13,18 +13,18 @@ GameM::GameM() {
 GameM::~GameM() {
 }
 
-void GameM::loadImg() {
-	if (gameoverImg) return;
-	gameoverImg = new CImage();
-	gameoverImg->Load(L"");
-}
-
 void GameM::init() {
-	flipStudentCount = 0;
-	isEnd = false;
+	getoutCount = flipStudentCount = 0;
+	isEnd = 0;
 	period = 1;
 	time = 1;
 	passClock = 0;
+
+	//for (size_t i = 0; i < everyPopmsgForInitClear.size(); i++) {
+	//	delete everyPopmsgForInitClear [i];
+	//}
+	//everyPopmsgForInitClear.clear();
+
 	// 교실사이즈 3고정
 	classrooms.resize(3);
 	for (size_t i = 0; i < classrooms.size(); i++) {
@@ -63,12 +63,16 @@ void GameM::init() {
 void GameM::update() {
 	if (!isGamePlayScene) return;
 
-	if (isEnd && KeyM::GetInst()->OnceKeyUp(VK_LBUTTON)) {
+	if (isEnd == 1 && KeyM::GetInst()->OnceKeyUp(VK_RBUTTON)) {
+		gameoverObj->isDelete = true;
 		init();
 	}
-
+	if (isEnd == 2) {
+		if (KeyM::GetInst()->OnceKeyUp(VK_RBUTTON))
+			isGamePlayScene = true;
+		return;
+	}
 	SoundM::update();
-	SceneM::tick();
 
 	// key
 	// a
@@ -85,13 +89,16 @@ void GameM::update() {
 		float _off = (lerpOffX - classrooms [i].off.x)*.15f;
 		classrooms [i].changeOffX(_off);
 	}
+	SceneM::tick();
 	if (isEnd) return;
 	//passClock = clock() - begin;
 	passClock += deltatime;
 	// 1sec : passClock * 0.001f
 	// 60sec : 1sec / 60
 	//time = 1 + passClock * 0.001f / 60.f;
-	time = 1 + passClock * 0.001f / 10.f;
+	// -----------------시간바꾸는곳-------------------------------
+	time = 1 + passClock * 0.001f / 1.f;
+	// ------------------------------------------------------------------------------
 
 
 	roundStartDelayTimer += deltatime;
@@ -101,7 +108,7 @@ void GameM::update() {
 	if (period + 1 <= (int)time) {
 		DBOUT(period << L"교시 끝\n")
 		if (period == 4) { // 4교시가 다 끝남
-			isEnd = true;
+			isEnd = 2;
 			SceneM::changeScene(1);
 			return;
 		}
@@ -168,8 +175,26 @@ void GameM::broadcastRound(int round) {
 }
 
 void GameM::gameover() {
-	UI::getIns().broadcastGameover();
-	isEnd = true;
+	if (isEnd) return;
+	gameoverObj = UI::getIns().broadcastGameover();
+	isEnd = 1;
+}
+
+int GameM::calculateClearScore() {
+	float count = flipStudentCount*100 - getoutCount*50;
+	float totalAngry = 0;
+	for (size_t i = 0; i < classrooms.size(); i++) {
+		for (size_t j = 0; j < classrooms[i].getStudentSize(); j++) {
+			totalAngry += classrooms [i].getStudent(j)->getAngryAmount();
+		}
+	}
+	totalAngry *= 50;
+	return totalAngry+count;
+}
+
+void GameM::stu_getout() {
+	getoutCount++;
+	increaseFlipStudent();
 }
 
 inline void GameM::increaseFlipStudent() { 

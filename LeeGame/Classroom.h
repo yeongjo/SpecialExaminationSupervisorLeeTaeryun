@@ -26,6 +26,9 @@ class Classroom : public Obj{
 	vector<Student*> students;
 	vector<Desk *> desks;
 	static CImage *img;
+	static CImage *numImg[3];
+
+	int classIdx;
 
 	bool isInit = false;
 public:
@@ -73,7 +76,7 @@ public:
 		img->Load(L"img/testpaper.jpg");
 	}
 
-	TestPaper(Pos<float>& _p){
+	TestPaper(Pos<float>& _p) : Guy(3){
 		p = _p+Pos<float>(221*2,328*2);
 		loadImg();
 		size.x = img->GetWidth()<<1;
