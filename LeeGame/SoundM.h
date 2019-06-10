@@ -37,17 +37,16 @@ public:
 	}
 
 	static void pop() {
-		sterma(sound[0], "sound/말풍선.mp3", false, .8f);
+		//sterma(sound[0], "sound/말풍선.mp3", false, 1.f);
 	}
 
 	static void sleep() {
-		sterma(sound[0], "sound/코고는 효과음.wav", true, .05f);
+		sterma(sound[1], "sound/코고는 효과음.wav", true, .05f);
 	}
 
 	static void TikTop() {
-		sterma(sound[0], "sound/시계초침.wav", true, .5f);
+		sterma(sound[2], "sound/시계초침.wav", true, .5f);
 	}
-
 
 	static void stopSleep() {
 
@@ -57,7 +56,7 @@ public:
 	}
 	// 잉잉이소리같은거
 	static void wantChangePaperSound() {
-		sterma(sound[0], "sound/ahh sound effec.mp3", true, .5f);
+		sterma(sound[3], "sound/ahh sound effec.mp3", true, 1.f);
 	}
 	static void headDance() {
 
