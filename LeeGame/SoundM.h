@@ -33,30 +33,36 @@ public:
 		//sterma(sound[0], "sound/코고는 효과음.wav", true, .05f);
 	}
 	static void flip() {
-		sterma(sound[0], "sound/책상엎고 나가기.mp3", false, .05f);
+		sterma(sound[0], "sound/책상엎고 나가기.mp3", false, .1f);
 	}
 
 	static void pop() {
 		//sterma(sound[0], "sound/말풍선.mp3", false, 1.f);
 	}
 
+	static FMOD_CHANNEL* sleepChannel;
+	static int sleepCount;
 	static void sleep() {
-		sterma(sound[1], "sound/코고는 효과음.wav", true, .05f);
+		sleepCount++;
+		sleepChannel = sterma(sound[1], "sound/코고는 효과음.wav", true, .1f);
+	}
+	static void stopSleep() {
+		sleepCount--;
+		if(sleepCount == 0)
+			FMOD_Channel_Stop(sleepChannel);
 	}
 
 	static void TikTop() {
-		sterma(sound[2], "sound/시계초침.wav", true, .5f);
+		sterma(sound[2], "sound/시계초침.wav", true, .1f);
 	}
 
-	static void stopSleep() {
-
-	}
+	
 	static void guyGetoutSound() {
 
 	}
 	// 잉잉이소리같은거
 	static void wantChangePaperSound() {
-		sterma(sound[3], "sound/ahh sound effec.mp3", true, 1.f);
+		sterma(sound[3], "sound/ahh sound effec.mp3", false, 0.1f);
 	}
 	static void headDance() {
 
@@ -74,7 +80,7 @@ public:
 	}
 
 private:
-	static void sterma(FMOD_SOUND** sound, const char* ch, bool isLoop, float volume) {
+	static FMOD_CHANNEL* sterma(FMOD_SOUND** sound, const char* ch, bool isLoop, float volume) {
 		
 		UINT mode = isLoop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT;
 		static FMOD_CHANNEL* channel;
@@ -92,6 +98,7 @@ private:
 		FMOD_System_PlaySound(g_System, FMOD_CHANNEL_FREE, *sound, 0, &channel);
 		FMOD_Channel_SetVolume(channel, volume);
 		//FMOD_Sound_Release(*sound);
+		return channel;
 	}
 };
 

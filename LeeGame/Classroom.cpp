@@ -35,6 +35,7 @@ void Classroom::init(int idx) {
 	classIdx = idx;
 	size.set(classroomX, classroomY);
 	p.set((idx-1) * size.x, 0);
+	off.x = 0;
 
 
 	constexpr int studentCount = 9;

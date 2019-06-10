@@ -125,10 +125,10 @@ void Student::render(HDC h) {
 	auto t = p + off;
 	sprite->render(h, t, size);
 
-	renderRect(h, t.x, t.y, angryUiSize, 5, RGB(20,20,20));
+	renderRect(h, t.x+angryUiOff, t.y, angryUiSize, 5, RGB(20,20,20));
 	angryAmount = angryAmount > 1 ? 1 : angryAmount;
 	float _size = angryAmount * angryUiSize;
-	renderRect(h, t.x, t.y, _size, 5, RGB(210,20,20));
+	renderRect(h, t.x+angryUiOff, t.y, _size, 5, RGB(210,20,20));
 }
 
 bool Student::isDestroyZone() {
@@ -144,7 +144,7 @@ void Student::removePopMsg() {
 }
 
 void StudentState::action(Student *stu) {
-	if (!myState || !isAble) return;
+	if (!myState || !myState->isAble) return;
 	myState->action(stu);
 }
 

@@ -119,9 +119,11 @@ constexpr int dbStartPosX = 0;
 constexpr int dbStartPosY = 0;
 Pos<> dbStartPos = Pos<>(dbStartPosX,dbStartPosY);
 
+CImage *mainImg;
+
 void makeFinalScene() {
 	SceneM::changeScene(1);
-	new FinalScene();
+	GameM::getIns().finalScene = new FinalScene();
 	SceneM::changeScene(0);
 }
 
@@ -137,7 +139,10 @@ void init(HWND hWnd) {
 	
 	GameInputM::getIns().init(hWnd, &dbStartPos);
 
-
+	GameM::getIns().isGamePlayScene = false;
+	SoundM::TikTop();
+	mainImg = new CImage();
+	mainImg->Load(L"img/시작화면.png");
 	// TODO 게임시작했을때 불리게하기
 	GameM::getIns().init();
 	makeFinalScene();
@@ -187,13 +192,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				SceneM::render(h);
 			else
 // TODO 메인화면 추가해야함
-				;
+				mainImg->Draw(h, 0,0);
 
 			win.postrender(dbStartPosX,dbStartPosY);
             EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
+		delete GameM::getIns().finalScene;
         PostQuitMessage(0);
         break;
     }

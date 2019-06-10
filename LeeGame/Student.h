@@ -36,7 +36,8 @@ private:
 
 	// [0 ~ 1] °¡Áü
 	float angryAmount;
-	float angryUiSize = 85;
+	float angryUiSize = 40;
+	int angryUiOff = 22;
 
 	bool isHisDeskFilped = false;
 	int flipRemoveTimer = 1000;

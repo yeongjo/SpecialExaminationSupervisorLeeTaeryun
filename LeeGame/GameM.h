@@ -5,6 +5,8 @@
 
 class GameoverBroadcastObj;
 class PopMsgBroadcastObj;
+class FinalScene;
+
 // 게임 관리자
 // 교시, 시간, 학생 관리
 class GameM : public Singleton<GameM>{
@@ -43,7 +45,9 @@ class GameM : public Singleton<GameM>{
 	GameoverBroadcastObj *gameoverObj;
 public:
 	vector<PopMsgBroadcastObj *> everyPopmsgForInitClear;
-	bool isGamePlayScene = true;
+	bool isGamePlayScene = false;
+
+	FinalScene *finalScene;
 	
 	GameM();
 	~GameM();
@@ -64,6 +68,10 @@ public:
 	void broadcastRound(int round);
 	
 	void gameover();
+
+	void goMainScene() {
+		init();
+	}
 
 	int calculateClearScore();
 

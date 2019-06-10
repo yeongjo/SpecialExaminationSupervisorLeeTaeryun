@@ -14,11 +14,16 @@ GameM::~GameM() {
 }
 
 void GameM::init() {
+	SceneM::changeScene(0);
 	getoutCount = flipStudentCount = 0;
 	isEnd = 0;
 	period = 1;
 	time = 1;
 	passClock = 0;
+	isEnd = 0;
+	isGamePlayScene = false;
+	watchClassIdx = 0;
+	lerpOffX = 0;
 
 	//for (size_t i = 0; i < everyPopmsgForInitClear.size(); i++) {
 	//	delete everyPopmsgForInitClear [i];
@@ -63,17 +68,23 @@ void GameM::init() {
 }
 
 void GameM::update() {
+	bool rbuttonup = false;
+	if (isEnd != 2)
+		rbuttonup = KeyM::GetInst()->OnceKeyUp(VK_RBUTTON);
+	if (rbuttonup && !isGamePlayScene) {
+		isGamePlayScene = true;
+	}
 	if (!isGamePlayScene) return;
-
-	if (isEnd == 1 && KeyM::GetInst()->OnceKeyUp(VK_RBUTTON)) {
+	
+	if (isEnd == 1 && rbuttonup) {
 		gameoverObj->isDelete = true;
 		init();
 	}
-	if (isEnd == 2) {
-		if (KeyM::GetInst()->OnceKeyUp(VK_RBUTTON))
-			isGamePlayScene = true;
-		return;
-	}
+	//if (isEnd == 2) {
+	//	if (rbuttonup)
+	//		isGamePlayScene = true;
+	//	return;
+	//}
 	SoundM::update();
 
 	// key
@@ -99,7 +110,7 @@ void GameM::update() {
 	// 60sec : 1sec / 60
 	//time = 1 + passClock * 0.001f / 60.f;
 	// -----------------시간바꾸는곳-------------------------------
-	time = 1 + passClock * 0.001f / 20.f;
+	time = 1 + passClock * 0.001f / .3f;
 	// ------------------------------------------------------------------------------
 
 
@@ -111,6 +122,7 @@ void GameM::update() {
 		DBOUT(period << L"교시 끝\n")
 		if (period == 4) { // 4교시가 다 끝남
 			isEnd = 2;
+			finalScene->init();
 			SceneM::changeScene(1);
 			return;
 		}
@@ -192,7 +204,7 @@ int GameM::calculateClearScore() {
 		}
 	}
 	totalAngry *= 50;
-	return totalAngry+count;
+	return 600-(totalAngry+count);
 }
 
 void GameM::stu_getout() {
