@@ -73,7 +73,8 @@ public:
 	int _idx;
 	Student *_stu;
 	// 0 sleep
-	// 1 paperplz
+	// 1 paper change plz
+	// 2 paper drop
 	PopMsgBroadcastObj(int idx, Pos<float>& _p, Student *stu) {
 		GameM::getIns().everyPopmsgForInitClear.push_back(this);
 		p = _p;

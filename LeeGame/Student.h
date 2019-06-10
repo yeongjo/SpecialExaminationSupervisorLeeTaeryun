@@ -167,7 +167,7 @@ public:
 	DropPaperStudentState() { range = 0; amount = 0.05f; }
 	bool _active(Student *stu) {
 		SoundM::wantChangePaperSound();
-		stu->popMsg(1);
+		stu->popMsg(2);
 		return true;
 	}
 	virtual void action(Student *stu);
