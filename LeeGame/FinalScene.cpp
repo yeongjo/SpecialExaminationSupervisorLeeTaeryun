@@ -1,5 +1,6 @@
 #include "FinalScene.h"
 
+
 CImage *FinalScene::img = nullptr;
 FinalScene::FinalScene() {
 	if (img == nullptr) {
@@ -14,18 +15,33 @@ FinalScene::~FinalScene() {
 }
 
 void FinalScene::init() {
-
-	// 파일에서 불러올
-	//score.push_back(30);
-	//score.push_back(12);
-	//score.push_back(1);
-	//
+	char FileName[100] = "Pizza.txt";
+	FILE* fptr = NULL;
+	if (!fopen_s(&fptr, FileName, "r+")) {
+		while (!feof(fptr))
+		{
+			for (size_t i = 0; i < 3; i++)
+			{
+				score.push_back(int());
+				fscanf_s(fptr, "%d ", &score[i]);
+			}
+		}
+		fclose(fptr);
+	}
 
 	score.push_back(GameM::getIns().calculateClearScore());
 
 	sort(score.begin(), score.end(), greater<int>());
 
 	score.resize(3);
+
+	if (!fopen_s(&fptr, "Pizza.txt", "wt")) {
+		for (size_t i = 0; i < 3; i++)
+		{
+			fprintf(fptr, "%d ", score[i]);
+		}
+		fclose(fptr);
+	}
 }
 
 void FinalScene::tick() {
@@ -42,7 +58,7 @@ void FinalScene::render(HDC h) {
 	int x = 218, y = 300;
 	wstringstream ss;
 
-	
+	SetBkMode(h, TRANSPARENT);
 	for (size_t i = 0; i < 3; i++) {
 		ss << score[i];
 		TextOut(h, x, y, ss.str().c_str(), ss.str().size()); ss.str(L"");
