@@ -78,6 +78,7 @@ void Student::onceUpWithOutMouseCheck() {
 
 inline void Student::popMsg(int idx) {
 	popMsgObj = UI::getIns().broadcastPopMsg(idx, p, this);
+	SoundM::pop();
 }
 
 void Student::tick() {
@@ -90,7 +91,6 @@ void Student::tick() {
 			delete this;
 		}
 	}
-	
 }
 
 void Student::action() {
@@ -219,6 +219,7 @@ void WantChangePaperStudentState::action(Student *stu) {
 	if (!isAble) return;
 	stu->getSprite()->changeAnim(6);
 	stu->takeAngryDamage(amount);
+	SoundM::wantChangePaperSound();
 }
 
 void WantChangePaperStudentState::fixState(Student *stu) {
