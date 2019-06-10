@@ -33,6 +33,7 @@ inline void DanceGuy::tick() {
 }
 
 inline bool DanceGuy::startDance(Classroom *_class) {
+	if (isAble) return false;
 	m_class = _class;
 	p.set(90*2+_class->p.x, 300*2+_class->p.y);
 	SoundM::dance();

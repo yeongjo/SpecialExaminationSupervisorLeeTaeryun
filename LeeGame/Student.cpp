@@ -77,6 +77,7 @@ void Student::onceUpWithOutMouseCheck() {
 }
 
 inline void Student::popMsg(int idx) {
+	if (popMsgObj) delete popMsgObj;
 	popMsgObj = UI::getIns().broadcastPopMsg(idx, p, this);
 	SoundM::pop();
 }

@@ -29,7 +29,7 @@ public:
 			SoundM::stopDance();
 			isAble = false;
 		}
-		return _t;
+		return false;
 	}
 };
 
