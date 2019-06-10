@@ -16,9 +16,9 @@ FinalScene::~FinalScene() {
 void FinalScene::init() {
 
 	// 파일에서 불러올
-	score.push_back(30);
-	score.push_back(12);
-	score.push_back(1);
+	//score.push_back(30);
+	//score.push_back(12);
+	//score.push_back(1);
 	//
 
 	score.push_back(GameM::getIns().calculateClearScore());
