@@ -62,10 +62,17 @@ void FinalScene::render(HDC h) {
 	HFONT hFont = CreateFont(30, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0,
 	VARIABLE_PITCH | FF_ROMAN, TEXT("³ª´®°íµñ"));
 	HFONT OldFont = (HFONT)SelectObject(h, hFont);
-	SetTextColor(h, RGB(233, 233, 233));
+	
+	
 
 	SetBkMode(h, TRANSPARENT);
 	for (size_t i = 0; i < 3; i++) {
+		if (GameM::getIns().calculateClearScore() == score[i]) {
+			SetTextColor(h, RGB(255, 0, 0));
+		}
+		else {
+			SetTextColor(h, RGB(233, 233, 233));
+		}
 		ss << score[i];
 		TextOut(h, x, y, ss.str().c_str(), ss.str().size()); ss.str(L"");
 		ss.clear();
