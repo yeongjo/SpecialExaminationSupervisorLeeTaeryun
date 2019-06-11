@@ -55,8 +55,13 @@ void FinalScene::render(HDC h) {
 	img->Draw(h, 0, 0);
 	// 218, 300
 	// 0,36
-	int x = 218, y = 300;
+	int x = 218, y = 295;
 	wstringstream ss;
+
+	HFONT hFont = CreateFont(30, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0,
+	VARIABLE_PITCH | FF_ROMAN, TEXT("³ª´®°íµñ"));
+	HFONT OldFont = (HFONT)SelectObject(h, hFont);
+	SetTextColor(h, RGB(233, 233, 233));
 
 	SetBkMode(h, TRANSPARENT);
 	for (size_t i = 0; i < 3; i++) {
@@ -66,4 +71,6 @@ void FinalScene::render(HDC h) {
 		y += 34;
 	}
 	
+	SelectObject(h, OldFont);
+	DeleteObject(hFont);
 }
