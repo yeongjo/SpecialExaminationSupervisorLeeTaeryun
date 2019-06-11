@@ -17,12 +17,12 @@ FinalScene::~FinalScene() {
 void FinalScene::init() {
 	char FileName[100] = "Pizza.txt";
 	FILE* fptr = NULL;
+	score.resize(3);
 	if (!fopen_s(&fptr, FileName, "r+")) {
 		while (!feof(fptr))
 		{
 			for (size_t i = 0; i < 3; i++)
 			{
-				score.push_back(int());
 				fscanf_s(fptr, "%d ", &score[i]);
 			}
 		}

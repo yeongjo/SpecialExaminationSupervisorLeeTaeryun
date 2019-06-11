@@ -18,7 +18,7 @@ void Student::loadImages() {
 	wstring t_names[] = {L"black", L"blue", L"red", L"yel"};
 	for (size_t i = 0; i < 4; i++) {
 		wstringstream ss;
-		vector<vector<wstring>> s(7);
+		vector<vector<wstring>> s(8);
 		ss << L"img/stu_" << t_names [i] << L"_flip_0000.png";
 		s [0].push_back(ss.str());ss.str(L"");
 		ss << L"img/stu_" << t_names [i] << L"_angry.png";
@@ -35,6 +35,8 @@ void Student::loadImages() {
 		s[5].push_back(ss.str());ss.str(L"");
 		ss << L"img/stu_" << t_names [i] << L"_wantchange.png";
 		s[6].push_back(ss.str());ss.str(L"");
+		ss << L"img/stu_yel_cheat.png";
+		s[7].push_back(ss.str());ss.str(L"");
 		preloadSprite [i] = new AnimSpriteByImages();
 		preloadSprite [i]->init(s);
 	}
@@ -107,6 +109,7 @@ bool Student::activeState() {
 
 void Student::angryFlipDesk() {
 	sitDesk->flip();
+	DBOUT(this << L"  flip\n");
 	if (state) {
 		delete state;
 		state = nullptr;
@@ -163,7 +166,7 @@ bool StudentState::active(Student *stu) {
 
 void SpyStudentState::action(Student *stu) {
 	if (!isAble) return;
-	stu->getSprite()->changeAnim(5);
+	stu->getSprite()->changeAnim(7);
 	if(targetStu)
 	targetStu->takeAngryDamage(amount);
 }

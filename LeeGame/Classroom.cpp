@@ -23,7 +23,8 @@ void Classroom::init(int idx) {
 	isInit = true;
 	if (img == nullptr) {
 		img = new CImage();
-		assert(!FAILED(img->Load(L"img/class.jpg")));
+		auto _t = !FAILED(img->Load(L"img/class.jpg"));
+		assert(_t);
 		Student::loadImages();
 
 		for (size_t i = 0; i < 3; i++) {

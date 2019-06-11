@@ -8,7 +8,8 @@ void AnimSpriteByImages::init(vector<vector<wstring>> &imgNames, int delay) {
 	for (size_t i = 0; i < imgNames.size(); i++) {
 		for (size_t j = 0; j < imgNames[i].size(); j++) {
 			auto t_image = new CImage();
-			assert(!FAILED(t_image->Load(imgNames [i][j].c_str())));
+			auto _check = !FAILED(t_image->Load(imgNames [i][j].c_str()));
+			assert(_check);
 			auto t = new FrameBlock(t_image, delay);
 			imgs[i].push_back(t);
 		}

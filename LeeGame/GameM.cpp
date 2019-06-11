@@ -99,7 +99,7 @@ void GameM::update() {
 	}
 
 	for (size_t i = 0; i < classrooms.size(); i++) {
-		float _off = (lerpOffX - classrooms [i].off.x)*.15f;
+		float _off = (lerpOffX - classrooms [i].off.x)*.28f;
 		classrooms [i].changeOffX(_off);
 	}
 	SceneM::tick();
@@ -110,7 +110,7 @@ void GameM::update() {
 	// 60sec : 1sec / 60
 	//time = 1 + passClock * 0.001f / 60.f;
 	// -----------------시간바꾸는곳-------------------------------
-	time = 1 + passClock * 0.001f / 30.f;
+	time = 1 + passClock * 0.001f / 20.f;
 	// ------------------------------------------------------------------------------
 
 
@@ -126,7 +126,7 @@ void GameM::update() {
 			SceneM::changeScene(1);
 			return;
 		}
-		angryDelay -= 1200/period;
+		angryDelay -= 1100/period;
 		period++;
 		roundStartDelayTimer = 0;
 		MTimer::changeEndTime(giveAngryTimer, angryDelay);

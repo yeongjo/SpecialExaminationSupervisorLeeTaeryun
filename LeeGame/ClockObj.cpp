@@ -17,7 +17,8 @@ ClockObj::~ClockObj() {
 inline void ClockObj::loadImg() {
 	if (clockImg) return;
 	clockImg = new CImage();
-	assert(SUCCEEDED(clockImg->Load(L"img/clock.png")));
+	auto _t = SUCCEEDED(clockImg->Load(L"img/clock.png"));
+	assert(_t);
 	
 }
 
