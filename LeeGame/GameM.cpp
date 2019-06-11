@@ -203,6 +203,7 @@ void GameM::gameover() {
 	if (isEnd) return;
 	gameoverObj = UI::getIns().broadcastGameover();
 	isEnd = 1;
+	SoundM::reset();
 }
 
 int GameM::calculateClearScore() {

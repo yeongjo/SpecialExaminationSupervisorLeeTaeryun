@@ -23,7 +23,7 @@ public:
 	bool isDestroyZone() {
 		if (!m_class) return false;
 		auto _class = m_class;
-		RECT rt = {_class->p.x- 100, _class->p.y, _class->p.x+_class->size.x * .12f, _class->p.y+_class->size.y};
+		RECT rt = {_class->p.x- 300, _class->p.y, _class->p.x+_class->size.x * .12f, _class->p.y+_class->size.y};
 		bool _t = collPointRect(p.x, p.y, &rt);
 		if (_t) {
 			SoundM::stopDance();

@@ -28,9 +28,10 @@ public:
 	}
 
 	static void reset() {
-		headDanceCount = sleepCount = 1;
+		danceCount = headDanceCount = sleepCount = 1;
 		stopSleep();
 		stopHeadDance();
+		stopDance();
 	}
 
 	static void annoySound() {
@@ -122,6 +123,7 @@ public:
 	static void Final() {
 		static FMOD_CHANNEL* channel;
 		sterma(sound[10], channel, "sound/Clapping Sound Effects.mp3", false, 0.3f);
+		reset();
 	}
 
 private:

@@ -60,7 +60,7 @@ void FinalScene::render(HDC h) {
 	wstringstream ss;
 
 	HFONT hFont = CreateFont(30, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0,
-	VARIABLE_PITCH | FF_ROMAN, TEXT("³ª´®°íµñ"));
+	VARIABLE_PITCH | FF_ROMAN, TEXT("¸¼Àº °íµñ"));
 	HFONT OldFont = (HFONT)SelectObject(h, hFont);
 	
 	
