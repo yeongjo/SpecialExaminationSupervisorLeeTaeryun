@@ -42,6 +42,7 @@ void FinalScene::init() {
 		}
 		fclose(fptr);
 	}
+	SoundM::Final();
 }
 
 void FinalScene::tick() {

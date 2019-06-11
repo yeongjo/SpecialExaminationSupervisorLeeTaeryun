@@ -105,7 +105,7 @@ public:
 	}
 	void onceUpWithOutMouseCheck() {
 		if (isDraging) {
-		SoundM::paperDrop();
+		//SoundM::paperDrop();
 	}
 	Guy::onceUpWithOutMouseCheck();
 	} 

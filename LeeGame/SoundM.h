@@ -85,6 +85,8 @@ public:
 
 
 	static void guyGetoutSound() {
+		static FMOD_CHANNEL* channel;
+		sterma(sound[9], channel, "sound/문닫음.wav", false, 0.1f);
 
 	}
 
@@ -108,12 +110,18 @@ public:
 
 	// 종이 들었다놨다
 	static void paperDrop() {
-
+		static FMOD_CHANNEL* channel;
+		sterma(sound[11], channel, "sound/종이.wav", false, 0.3f);
 	}
 	// 학생 드래그하는소리 들었다 내렷다
 	static void studentDrop() {
 		static FMOD_CHANNEL *channel;
 		sterma(sound [6], channel, "sound/Duck Toy.mp3", false, 0.1f);
+	}
+
+	static void Final() {
+		static FMOD_CHANNEL* channel;
+		sterma(sound[10], channel, "sound/Clapping Sound Effects.mp3", false, 0.3f);
 	}
 
 private:
